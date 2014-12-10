@@ -65,6 +65,14 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/**/*.html'],
         tasks: ['newer:copy:app']
       },
+      coffee: {
+        files: ['<%= yeoman.app %>/<%= yeoman.scripts %>/{,*/}*.{coffee,litcoffee,coffee.md}'],
+        tasks: ['newer:coffee:dist']
+      },
+//      coffeeTest: {
+//        files: ['test/spec/{,*/}*.{coffee,litcoffee,coffee.md}'],
+//        tasks: ['newer:coffee:test', 'karma']
+//      },
       js: {
         files: ['<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js'],
         tasks: ['newer:copy:app', 'newer:jshint:all']
@@ -156,6 +164,32 @@ module.exports = function (grunt) {
       sass: {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         ignorePath: /(\.\.\/){1,2}lib\//
+      }
+    },
+
+    // Compiles CoffeeScript to JavaScript
+    coffee: {
+      options: {
+        sourceMap: true,
+        sourceRoot: ''
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.app %>/scripts',
+          src: '{,*/}*.coffee',
+          dest: '.tmp/scripts',
+          ext: '.js'
+        }]
+      },
+      test: {
+        files: [{
+          expand: true,
+          cwd: 'test/spec',
+          src: '{,*/}*.coffee',
+          dest: '.tmp/spec',
+          ext: '.js'
+        }]
       }
     },
 
@@ -306,18 +340,21 @@ module.exports = function (grunt) {
         }
       },
       server: [
+        'coffee:dist',
         'compass:server',
         'copy:styles',
         'copy:vendor',
         'copy:fonts'
       ],
       test: [
+        'coffee',
         'compass',
         'copy:styles',
         'copy:vendor',
         'copy:fonts'
       ],
       dist: [
+        'coffee',
         'compass:dist',
         'copy:styles',
         'copy:vendor',
