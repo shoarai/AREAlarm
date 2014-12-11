@@ -67,7 +67,7 @@ module.exports = function (grunt) {
       },
       coffee: {
         files: ['<%= yeoman.app %>/<%= yeoman.scripts %>/{,*/}*.{coffee,litcoffee,coffee.md}'],
-        tasks: ['newer:coffee:dist']
+        tasks: ['newer:coffee:dist', 'newer:copy:tmp']
       },
 //      coffeeTest: {
 //        files: ['test/spec/{,*/}*.{coffee,litcoffee,coffee.md}'],
@@ -321,7 +321,7 @@ module.exports = function (grunt) {
         dest: 'www/',
         src: [
           '**/*',
-          '!**/*.(scss,sass,css)',
+          '!**/*.(scss,sass,css)'
         ]
       },
       tmp: {
@@ -429,7 +429,7 @@ module.exports = function (grunt) {
       },
       continuous: {
         browsers: ['PhantomJS'],
-        singleRun: true,
+        singleRun: true
       }
     },
 
