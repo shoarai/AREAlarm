@@ -1,0 +1,25 @@
+<div>
+<div id="day" class="button-bar">
+  <a class="button" ng-class="isDayTure(setting.time.days[1])" ng-click="setting.time.days[1]=!setting.time.days[1]">月</a>
+  <a class="button" ng-class="isDayTure(setting.time.days[2])" ng-click="setting.time.days[2]=!setting.time.days[2]">火</a>
+  <a class="button" ng-class="isDayTure(setting.time.days[3])" ng-click="setting.time.days[3]=!setting.time.days[3]">水</a>
+  <a class="button" ng-class="isDayTure(setting.time.days[4])" ng-click="setting.time.days[4]=!setting.time.days[4]">木</a>
+  <a class="button" ng-class="isDayTure(setting.time.days[5])" ng-click="setting.time.days[5]=!setting.time.days[5]">金</a>
+  <a class="button" ng-class="isDayTure(setting.time.days[6])" ng-click="setting.time.days[6]=!setting.time.days[6]">土</a>
+  <a class="button" ng-class="isDayTure(setting.time.days[0])" ng-click="setting.time.days[0]=!setting.time.days[0]">日</a>
+</div>
+
+<div class="row">
+  <div class="col">
+    <label>Start Time
+    <select timepicker class="ion-input-select" ng-model="setting.time.start"></select>    
+    </label>
+  </div>
+  <div id="time-between" class="col">〜</div>
+  <div class="col">
+    <label>End Time
+    <select timepicker class="ion-input-select" ng-model="setting.time.end"></select>
+    </label>
+  </div>
+</div>
+</div>
