@@ -20,7 +20,7 @@
 
   <body ng-app="AREAlarm">
 
-    <ion-pane>
+    <ion-pane ng-controller="MainCtrl">
       <ion-header-bar class="bar-stable">
         <h1 class="title">AREAlarm</h1>
         <label class="toggle" ng-hide="areaEdit">
@@ -33,8 +33,7 @@
       </ion-header-bar>
       <ion-content>
         <timeselect></timeselect>
-        <div style="width:100%;height:400px" id="map_canvas"></div>
-        <button id="button">Full Screen</button>
+        <areaselect></areaselect>
       </ion-content>
     </ion-pane>
     <script type="text/javascript">
