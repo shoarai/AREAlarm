@@ -37,17 +37,6 @@
       </ion-content>
     </ion-pane>
     <script type="text/javascript">
-    var map;
-    document.addEventListener("deviceready", function() {
-      var button = document.getElementById("button");
-      button.addEventListener("click", onBtnClicked, false);
-
-      var div = document.getElementById("map_canvas");
-      map = plugin.google.maps.Map.getMap(div);
-    }, false);
-    function onBtnClicked() {
-      map.showDialog();
-    }
     </script>
 
     <!-- build:js scripts/vendor.js -->
