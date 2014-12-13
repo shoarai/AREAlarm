@@ -30,11 +30,7 @@ angular.module("AREAlarm", [
       target.parentNode.insertBefore script, target
 
 
-    console.log $ionicPlatform
 
-    if plugin?
-      div = document.getElementById 'map_canvas'
-      map = plugin.google.maps.Map.getMap div
 
     # button = document.getElementById("button")
     # button.addEventListener("click", onBtnClicked, false)
