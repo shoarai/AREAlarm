@@ -71,6 +71,10 @@ angular.module('AREAlarm')
           console.log 'onClickMarker'
           mapService.panToArea()
 
+        $scope.onChangeRadius = (radius) ->
+          console.log 'onChangeRadius'
+          mapService.setAreaRadius radius
+
       return
     ]
     # link: (scope, element, attrs) ->
@@ -209,7 +213,15 @@ angular.module('AREAlarm')
     # map.panTo marker.position
 
   ###*
+   * Set radius of area
+  ###
+  @setAreaRadius = (radius) ->
+    _circle.setRadius radius
+
+
+  ###*
    * Show marker
+   * @private
   ###
   showMarker = (latitude, longitude) ->
     console.log 'showMarker: ', latitude, longitude
@@ -233,7 +245,10 @@ angular.module('AREAlarm')
     #   longitude = ev.latLng.lng()
     # )
      
-  # Show circle
+  ###
+   * Show Circle
+   * @private
+  ###
   showCircle = (latitude, longitude, radius) ->
     console.log 'showCircle: ', latitude, longitude, radius
     deferred = $q.defer()

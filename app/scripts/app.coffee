@@ -8,6 +8,7 @@
 angular.module("AREAlarm", [
   "ionic"
   "config"
+  "angularLocalStorage"
 ])
 
 .run ($ionicPlatform) ->
@@ -31,165 +32,19 @@ angular.module("AREAlarm", [
   return
 
 
-.service 'gpsService', ($q) ->
-
-  # Get position
-  @getPosition = ->
-    deferred = $q.defer();
-    navigator.geolocation.getCurrentPosition(
-      (pos) ->
-        console.log 'Get current position'
-        deferred.resolve pos.coords
-      () ->
-        deferred.reject();
-    )
-    return deferred.promise;
-    
-  return @
-
-
-
-.service 'timeService', ->    
-  # Is now in start time and end time
-  @isInTime = (time) ->
-#      TODO time.days
-
-
-    start = time.start
-    end = time.end
-
-    startNums = (start).split ':'
-    startHourNum = startNums[0]|0
-    startMinNum  = startNums[1]|0
-    startNum = startHourNum * 60 + startMinNum
-
-    endNums = (end).split ':'
-    endHourNum = endNums[0]|0
-    endMinNum  = endNums[1]|0
-    endNum = endHourNum * 60 + endMinNum
-
-    dateObj = new Date()
-    nowHourNum = dateObj.getHours()
-    nowMinNum  = dateObj.getMinutes()
-    nowNum = nowHourNum * 60 + nowMinNum
-
-    if startNum <= endNum and
-       startNum <= nowNum and nowNum <= endNum
-      return true
-    else if startNum > endNum and
-       (startNum <= nowNum or nowNum <= endNum)
-      return true
-
-    return false
-
-  # Get time to start time
-  @getToStartMiliSec = (time) ->
-    start = time.start
-
-    startNums = (start).split ':'
-    startHourNum = startNums[0]|0
-    startMinNum  = startNums[1]|0
-    startNum = startHourNum * 60 + startMinNum
-
-    dateObj = new Date()
-    nowHourNum = dateObj.getHours()
-    nowMinNum  = dateObj.getMinutes()
-    nowNum = nowHourNum * 60 + nowMinNum
-
-    toStart = 0
-    if nowNum <= startNum
-      toStart = (startNum - nowNum)*60*1000
-    else
-      toStart = (24*60-nowNum+startNum)*60*1000
-
-    return toStart
-
-
-  # Get time to end time
-  @getToEndMiliSec = (time) ->
-    end = time.end
-
-    endNums = (end).split ':'
-    endHourNum = endNums[0]|0
-    endMinNum  = endNums[1]|0
-    endNum = endHourNum * 60 + endMinNum
-
-    dateObj = new Date()
-    nowHourNum = dateObj.getHours()
-    nowMinNum  = dateObj.getMinutes()
-    nowNum = nowHourNum * 60 + nowMinNum
-
-    toEnd = 0
-    if nowNum <= endNum
-      toEnd = (endNum - nowNum)*60*1000
-    else
-      toEnd = (24*60-nowNum+endNum)*60*1000
-
-    return toEnd
-    
-  return @
-
-
-.factory 'initService', ($q) ->
-  return {
-    init: ($scope, gpsService, mapService) ->
-      deferred = $q.defer()
-
-      if $scope.setting? and $scope.setting.time? and $scope.setting.area?
-        deferred.resolve()
-
-      else
-        log 'Init setting'
-        # Init setting
-        $scope.setting = {}
-        
-        $scope.setting.power = false
-
-        $scope.setting.time =
-          days : [false, true, true, true, true, true, false]
-          start: '8:00'
-          end  : '9:00'
-
-        gpsService.getPosition()
-          .then(
-            (position) ->
-              $scope.setting.area =
-                latitude: position.latitude
-                longitude: position.longitude
-                radius: 400
-            () ->
-              alert 'Not get current postion by GPS'
-              $scope.setting.area =
-                latitude: 35.68977383707651
-                longitude: 139.7002302664307
-                radius: 400
-          )
-          .finally( ->
-            deferred.resolve()
-          )
-
-      return deferred.promise
-  }
-
-
-
-
-
-
 #.controller 'MainCtrl', ($scope, $timeout, $window, storage, initService, timeService, gpsService, mapService) ->
-.controller 'MainCtrl', ($scope, $timeout, $window, initService, timeService, gpsService, mapService) ->
-  console.log localStorage
-
+.controller 'MainCtrl', ($scope, $timeout, $window, storage) ->
+  # DEBUG
+  # localStorage.clear()
+  
+  console.log 'localStorage: ', localStorage
 
   # Init data
-  # storage.bind($scope, 'setting')
-
-
-  if not $scope.setting?
-    $scope.setting = {}
+  storage.bind $scope, 'setting', {defaultValue:{}}
 
   if not $scope.setting.power?
     $scope.setting.power = false
+
 
 
   $scope.$watch 'setting', ->
@@ -376,3 +231,149 @@ angular.module("AREAlarm", [
         loopVib()
       , 5000)
     loopVib()
+
+
+
+
+
+.service 'gpsService', ($q) ->
+
+  # Get position
+  @getPosition = ->
+    deferred = $q.defer();
+    navigator.geolocation.getCurrentPosition(
+      (pos) ->
+        console.log 'Get current position'
+        deferred.resolve pos.coords
+      () ->
+        deferred.reject();
+    )
+    return deferred.promise;
+    
+  return @
+
+
+
+.service 'timeService', ->    
+  # Is now in start time and end time
+  @isInTime = (time) ->
+#      TODO time.days
+
+
+    start = time.start
+    end = time.end
+
+    startNums = (start).split ':'
+    startHourNum = startNums[0]|0
+    startMinNum  = startNums[1]|0
+    startNum = startHourNum * 60 + startMinNum
+
+    endNums = (end).split ':'
+    endHourNum = endNums[0]|0
+    endMinNum  = endNums[1]|0
+    endNum = endHourNum * 60 + endMinNum
+
+    dateObj = new Date()
+    nowHourNum = dateObj.getHours()
+    nowMinNum  = dateObj.getMinutes()
+    nowNum = nowHourNum * 60 + nowMinNum
+
+    if startNum <= endNum and
+       startNum <= nowNum and nowNum <= endNum
+      return true
+    else if startNum > endNum and
+       (startNum <= nowNum or nowNum <= endNum)
+      return true
+
+    return false
+
+  # Get time to start time
+  @getToStartMiliSec = (time) ->
+    start = time.start
+
+    startNums = (start).split ':'
+    startHourNum = startNums[0]|0
+    startMinNum  = startNums[1]|0
+    startNum = startHourNum * 60 + startMinNum
+
+    dateObj = new Date()
+    nowHourNum = dateObj.getHours()
+    nowMinNum  = dateObj.getMinutes()
+    nowNum = nowHourNum * 60 + nowMinNum
+
+    toStart = 0
+    if nowNum <= startNum
+      toStart = (startNum - nowNum)*60*1000
+    else
+      toStart = (24*60-nowNum+startNum)*60*1000
+
+    return toStart
+
+
+  # Get time to end time
+  @getToEndMiliSec = (time) ->
+    end = time.end
+
+    endNums = (end).split ':'
+    endHourNum = endNums[0]|0
+    endMinNum  = endNums[1]|0
+    endNum = endHourNum * 60 + endMinNum
+
+    dateObj = new Date()
+    nowHourNum = dateObj.getHours()
+    nowMinNum  = dateObj.getMinutes()
+    nowNum = nowHourNum * 60 + nowMinNum
+
+    toEnd = 0
+    if nowNum <= endNum
+      toEnd = (endNum - nowNum)*60*1000
+    else
+      toEnd = (24*60-nowNum+endNum)*60*1000
+
+    return toEnd
+    
+  return @
+
+
+.factory 'initService', ($q) ->
+  return {
+    init: ($scope, gpsService, mapService) ->
+      deferred = $q.defer()
+
+      if $scope.setting? and $scope.setting.time? and $scope.setting.area?
+        deferred.resolve()
+
+      else
+        log 'Init setting'
+        # Init setting
+        $scope.setting = {}
+        
+        $scope.setting.power = false
+
+        $scope.setting.time =
+          days : [false, true, true, true, true, true, false]
+          start: '8:00'
+          end  : '9:00'
+
+        gpsService.getPosition()
+          .then(
+            (position) ->
+              $scope.setting.area =
+                latitude: position.latitude
+                longitude: position.longitude
+                radius: 400
+            () ->
+              alert 'Not get current postion by GPS'
+              $scope.setting.area =
+                latitude: 35.68977383707651
+                longitude: 139.7002302664307
+                radius: 400
+          )
+          .finally( ->
+            deferred.resolve()
+          )
+
+      return deferred.promise
+  }
+
+
