@@ -63,7 +63,9 @@ angular.module('AREAlarm')
       onReadyMap = ->
         console.log 'onReadyMap'
 
-        areaTmp = $scope.setting.area
+        areaBeforeEdit = $scope.setting.area
+
+        $scope.edit = false
 
         $scope.onClickLocate = ->
           console.log 'onClickLocate'
@@ -74,19 +76,26 @@ angular.module('AREAlarm')
           mapService.panToArea()
 
         $scope.onChangeRadius = (radius) ->
-          console.log 'onChangeRadius'
+          console.log 'onClickRadius'
           mapService.setAreaRadius radius
 
+        $scope.onClickEdit = ->
+          console.log 'onClickEdit'
+          $scope.radius = $scope.setting.area.radius
+          areaBeforeEdit = $scope.setting.area
+
         $scope.onClickOK = ->
-          console.log 'onChangeOK'
+          console.log 'onClickOK'
           $scope.setting.area = mapService.getArea()
           console.log $scope.setting.area
-          areaTmp = $scope.setting.area
 
         $scope.onClickCancel = ->
-          console.log 'onChangeCancel'
-          # mapService.showArea areaTmp
-
+          console.log 'onClickCancel'
+          mapService.showArea areaBeforeEdit
+            .then(
+              ->
+                mapService.panToArea()
+            )
 
       return
     ]
@@ -146,6 +155,12 @@ angular.module('AREAlarm')
   @showArea = (area) ->
     console.log 'showArea'
     deferred = $q.defer()
+
+    if _marker.remove?
+      _marker.remove()
+    if _circle.remove?
+      _circle.remove()
+
     $q.all([
       showMarker area.latitude, area.longitude
       showCircle area
@@ -271,10 +286,10 @@ angular.module('AREAlarm')
     deferred = $q.defer()
     _map.addCircle({
       center: new plugin.google.maps.LatLng area.latitude, area.longitude
-      radius: area.radius,
-      strokeColor : '#AA00FF',
-      strokeWidth: 5,
-      fillColor : '#880000'
+      radius: area.radius
+      strokeColor : 'rgb(74, 135, 238)'
+      strokeWidth: 5
+      fillColor : 'rgb(67, 206, 230)'
     }, (circle) ->
       console.log 'showedCircle: ', circle
       _circle = circle
