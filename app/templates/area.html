@@ -7,8 +7,12 @@
   </div>
   <div class="range range-positive">
     <i class="icon ion-male"></i>
-    <input type="range" name="radius" min="200" max="3000" ng-model="setting.area.radius" ng-change="onChangeRadius(setting.area.radius)">
+    <input type="range" name="radius" min="200" max="10000" ng-model="areaTmp.radius" ng-change="onChangeRadius(areaTmp.radius)">
     <!-- <i class="icon ion-log-out"></i> -->
+  </div>
+  <div class="button-bar">
+    <a class="button" ng-click="onClickCancel()">Cancel</a>
+    <a class="button button-positive" ng-click="onClickOK()">OK</a>
   </div>
   <button id="button">Full Screen</button>
 </div>

@@ -22,7 +22,7 @@ angular.module('AREAlarm')
 
         if $scope.setting? and $scope.setting.area? and $scope.setting.area.latitude?
           console.log 'Settings area: ', $scope.setting.area
-          mapService.showMap 'map_canvas', $scope.setting.area.latitude, $scope.setting.area.longitude, $scope.setting.area.radius
+          mapService.showMap 'map_canvas', $scope.setting.area
             .then(
               ->
                 onReadyMap()
@@ -63,6 +63,8 @@ angular.module('AREAlarm')
       onReadyMap = ->
         console.log 'onReadyMap'
 
+        areaTmp = $scope.setting.area
+
         $scope.onClickLocate = ->
           console.log 'onClickLocate'
           mapService.panToMyLocation()
@@ -74,6 +76,17 @@ angular.module('AREAlarm')
         $scope.onChangeRadius = (radius) ->
           console.log 'onChangeRadius'
           mapService.setAreaRadius radius
+
+        $scope.onClickOK = ->
+          console.log 'onChangeOK'
+          $scope.setting.area = mapService.getArea()
+          console.log $scope.setting.area
+          areaTmp = $scope.setting.area
+
+        $scope.onClickCancel = ->
+          console.log 'onChangeCancel'
+          # mapService.showArea areaTmp
+
 
       return
     ]
@@ -88,24 +101,11 @@ angular.module('AREAlarm')
   _map = _marker = _circle = {}
 
   ###*
-   * Get area
-  ###
-  @getArea = ->
-    return {
-      latitude: latitude
-      longitude: longitude
-      radius: circle.radius
-    }
-
-  ###*
    * Show map
    * @param  {string} id    Element id
-   * @param  {number} lati  Latitude of marker
-   * @param  {number} longi Longitude of marker
-   * @param  {number} rad   Radius of circle
-   * @return {object}       mapService
+   * @param  {object} area  area
   ###
-  @showMap = (id, lati, longi, rad) ->
+  @showMap = (id, area) ->
     deferred = $q.defer()
 
     if not plugin?
@@ -114,18 +114,18 @@ angular.module('AREAlarm')
       return deferred.promise
 
     mapDiv = document.getElementById id
-    if lati?
-      console.log 'def', lati
+    if area?
+      console.log 'def', area
       _map = plugin.google.maps.Map.getMap mapDiv, {
           camera:
-            latLng: new plugin.google.maps.LatLng lati, longi
+            latLng: new plugin.google.maps.LatLng area.latitude, area.longitude
             zoom: 13
         }
       _map.clear()
       _map.on plugin.google.maps.event.MAP_READY,
         (map) =>
           console.log 'onMapReady'
-          @.showArea lati, longi, rad
+          @.showArea area
           deferred.resolve()
     else
       console.log 'nondef'
@@ -141,16 +141,14 @@ angular.module('AREAlarm')
 
   ###*
    * Show area of circle
-   * @param  {number} lati  Latitude of center
-   * @param  {number} longi Longitude of center
-   * @param  {number} rad   Radius of circle
+   * @param  {object} area  area
   ###
-  @showArea = (latitude, longitude, radius) ->
+  @showArea = (area) ->
     console.log 'showArea'
     deferred = $q.defer()
     $q.all([
-      showMarker latitude, longitude
-      showCircle latitude, longitude, radius
+      showMarker area.latitude, area.longitude
+      showCircle area
     ]).then(
       ->
         _marker.addEventListener plugin.google.maps.event.MARKER_DRAG_END,
@@ -218,6 +216,25 @@ angular.module('AREAlarm')
   @setAreaRadius = (radius) ->
     _circle.setRadius radius
 
+  ###*
+   * Get area
+  ###
+  @getArea = ->
+    latLng = _circle.getCenter()
+    console.log latLng
+    return {
+      latitude: latLng.lat
+      longitude: latLng.lng
+      radius: _circle.getRadius()
+    }
+
+
+    # return {
+    #   latitude: latitude
+    #   longitude: longitude
+    #   radius: circle.radius
+    # }
+
 
   ###*
    * Show marker
@@ -249,12 +266,12 @@ angular.module('AREAlarm')
    * Show Circle
    * @private
   ###
-  showCircle = (latitude, longitude, radius) ->
-    console.log 'showCircle: ', latitude, longitude, radius
+  showCircle = (area) ->
+    console.log 'showCircle: ', area
     deferred = $q.defer()
     _map.addCircle({
-      center: new plugin.google.maps.LatLng latitude, longitude
-      radius: radius,
+      center: new plugin.google.maps.LatLng area.latitude, area.longitude
+      radius: area.radius,
       strokeColor : '#AA00FF',
       strokeWidth: 5,
       fillColor : '#880000'
