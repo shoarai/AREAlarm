@@ -12,9 +12,7 @@ angular.module('AREAlarm')
 
       $scope.onClickDemo = ->
         console.log 'onClickDemo'
-        console.log navigator
-        # console.log navigator.vibrate
-        # navigator.vibrate 100
+        navigator.vibrate 100
 
       return
     ]
