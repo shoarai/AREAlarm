@@ -33,7 +33,7 @@ angular.module("AREAlarm", [
 
 
 #.controller 'MainCtrl', ($scope, $timeout, $window, storage, initService, timeService, gpsService, mapService) ->
-.controller 'MainCtrl', ($scope, $timeout, $window, storage, timeService) ->
+.controller 'MainCtrl', ($scope, $window, storage, timeService, positionWatcher) ->
   # DEBUG
   # localStorage.clear()
   
@@ -68,12 +68,16 @@ angular.module("AREAlarm", [
       # If here is in area, start watching position
       # If not, wait start time
       if timeService.isInTime $scope.setting.time
-        console.log 'isInTime'
-
-        # $scope.watching = true
+        toEnd = timeService.calcTime2end $scope.setting.time
+        positionWatcher.start toEnd
       else
         console.log 'not isInTime'
-
+        toStart = timeService.calcTime2start $scope.setting.time
+        console.log 'toStart: ', toStart
+        positionWatcher.wait toStart
+    else
+      positionWatcher.stop()
+      return
         # waitWatchPosition()
 #        watchService.start $scope, timeService, gpsService, mapService
     # else
@@ -82,12 +86,60 @@ angular.module("AREAlarm", [
 
 
 
+.service 'positionWatcher', ($timeout) ->
+  timeoutWaitStart = timeoutWaitEnd = timeoutWatch = 0
 
-  return
+
+  watch = ->
+
+    return
+    # TODO Get position
+
+    # distance = mapService.calcDistance pos
+    if distance < 0
+      navigator.vibrate 800
+      @.wait()
+    else
+      timeoutWatch = $timeout(
+        -> watchPosition(),
+      2000)
 
 
-  
 
+  @start = (watchingTime) ->
+    timeoutWaitEnd = $timeout( ->
+      console.log 'end time!!!'
+      stopWatchPosition()
+    , watchingTime)
+
+    # DEBUG 
+    navigator.vibrate 800
+
+    return
+
+  @stop = ->
+    $timeout.cancel timeoutWaitStart
+    $timeout.cancel timeoutWaitEnd
+    return
+
+  @wait = (waitTime) ->
+    console.log 'waitWatchPosition'
+    timeoutWaitStart = $timeout( =>
+      console.log 'start time!!!'
+      @.start()
+    , waitTime)
+
+
+
+    return
+
+
+  return @
+
+
+
+
+.controller 'template', ->
 
   ###*
    * DEBUG
@@ -234,9 +286,6 @@ angular.module("AREAlarm", [
         loopVib()
       , 5000)
     loopVib()
-
-
-
 
 
 
