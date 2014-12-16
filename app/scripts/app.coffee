@@ -33,7 +33,7 @@ angular.module("AREAlarm", [
 
 
 #.controller 'MainCtrl', ($scope, $timeout, $window, storage, initService, timeService, gpsService, mapService) ->
-.controller 'MainCtrl', ($scope, $timeout, $window, storage) ->
+.controller 'MainCtrl', ($scope, $timeout, $window, storage, timeService) ->
   # DEBUG
   # localStorage.clear()
   
@@ -67,10 +67,13 @@ angular.module("AREAlarm", [
 
       # If here is in area, start watching position
       # If not, wait start time
+      if timeService.isInTime $scope.setting.time
+        console.log 'isInTime'
 
-      # if timeService.isInTime($scope.setting.time)
         # $scope.watching = true
-      # else
+      else
+        console.log 'not isInTime'
+
         # waitWatchPosition()
 #        watchService.start $scope, timeService, gpsService, mapService
     # else
@@ -236,103 +239,91 @@ angular.module("AREAlarm", [
 
 
 
-.service 'gpsService', ($q) ->
 
-  # Get position
-  @getPosition = ->
-    deferred = $q.defer();
-    navigator.geolocation.getCurrentPosition(
-      (pos) ->
-        console.log 'Get current position'
-        deferred.resolve pos.coords
-      () ->
-        deferred.reject();
-    )
-    return deferred.promise;
-    
-  return @
 
 
 
 .service 'timeService', ->    
-  # Is now in start time and end time
-  @isInTime = (time) ->
-#      TODO time.days
+  return {
+    ###*
+     * Is now in start time and end time
+    ###
+    isInTime: (time) ->
+      start = time.start
+      end = time.end
 
+      startNums = (start).split ':'
+      startHourNum = startNums[0]|0
+      startMinNum  = startNums[1]|0
+      startNum = startHourNum * 60 + startMinNum
 
-    start = time.start
-    end = time.end
+      endNums = (end).split ':'
+      endHourNum = endNums[0]|0
+      endMinNum  = endNums[1]|0
+      endNum = endHourNum * 60 + endMinNum
 
-    startNums = (start).split ':'
-    startHourNum = startNums[0]|0
-    startMinNum  = startNums[1]|0
-    startNum = startHourNum * 60 + startMinNum
+      dateObj = new Date()
+      nowHourNum = dateObj.getHours()
+      nowMinNum  = dateObj.getMinutes()
+      nowNum = nowHourNum * 60 + nowMinNum
 
-    endNums = (end).split ':'
-    endHourNum = endNums[0]|0
-    endMinNum  = endNums[1]|0
-    endNum = endHourNum * 60 + endMinNum
+      if startNum <= endNum and
+         startNum <= nowNum and nowNum <= endNum
+        return true
+      else if startNum > endNum and
+         (startNum <= nowNum or nowNum <= endNum)
+        return true
 
-    dateObj = new Date()
-    nowHourNum = dateObj.getHours()
-    nowMinNum  = dateObj.getMinutes()
-    nowNum = nowHourNum * 60 + nowMinNum
+      return false
 
-    if startNum <= endNum and
-       startNum <= nowNum and nowNum <= endNum
-      return true
-    else if startNum > endNum and
-       (startNum <= nowNum or nowNum <= endNum)
-      return true
+    ###*
+     * Calculate time to start time
+    ###
+    calcTime2start: (time) ->
+      start = time.start
 
-    return false
+      startNums = (start).split ':'
+      startHourNum = startNums[0]|0
+      startMinNum  = startNums[1]|0
+      startNum = startHourNum * 60 + startMinNum
 
-  # Get time to start time
-  @getToStartMiliSec = (time) ->
-    start = time.start
+      dateObj = new Date()
+      nowHourNum = dateObj.getHours()
+      nowMinNum  = dateObj.getMinutes()
+      nowNum = nowHourNum * 60 + nowMinNum
 
-    startNums = (start).split ':'
-    startHourNum = startNums[0]|0
-    startMinNum  = startNums[1]|0
-    startNum = startHourNum * 60 + startMinNum
+      toStart = 0
+      if nowNum <= startNum
+        toStart = (startNum - nowNum)*60*1000
+      else
+        toStart = (24*60-nowNum+startNum)*60*1000
 
-    dateObj = new Date()
-    nowHourNum = dateObj.getHours()
-    nowMinNum  = dateObj.getMinutes()
-    nowNum = nowHourNum * 60 + nowMinNum
+      return toStart
 
-    toStart = 0
-    if nowNum <= startNum
-      toStart = (startNum - nowNum)*60*1000
-    else
-      toStart = (24*60-nowNum+startNum)*60*1000
+    ###*
+     * Calculate time to end time
+    ###
+    calcTime2end: (time) ->
+      end = time.end
 
-    return toStart
+      endNums = (end).split ':'
+      endHourNum = endNums[0]|0
+      endMinNum  = endNums[1]|0
+      endNum = endHourNum * 60 + endMinNum
 
+      dateObj = new Date()
+      nowHourNum = dateObj.getHours()
+      nowMinNum  = dateObj.getMinutes()
+      nowNum = nowHourNum * 60 + nowMinNum
 
-  # Get time to end time
-  @getToEndMiliSec = (time) ->
-    end = time.end
+      toEnd = 0
+      if nowNum <= endNum
+        toEnd = (endNum - nowNum)*60*1000
+      else
+        toEnd = (24*60-nowNum+endNum)*60*1000
 
-    endNums = (end).split ':'
-    endHourNum = endNums[0]|0
-    endMinNum  = endNums[1]|0
-    endNum = endHourNum * 60 + endMinNum
-
-    dateObj = new Date()
-    nowHourNum = dateObj.getHours()
-    nowMinNum  = dateObj.getMinutes()
-    nowNum = nowHourNum * 60 + nowMinNum
-
-    toEnd = 0
-    if nowNum <= endNum
-      toEnd = (endNum - nowNum)*60*1000
-    else
-      toEnd = (24*60-nowNum+endNum)*60*1000
-
-    return toEnd
-    
-  return @
+      return toEnd
+  }
 
 
 .factory 'initService', ($q) ->
