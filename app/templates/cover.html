@@ -1,0 +1,26 @@
+<div id="cover" ng-show="setting.power">
+  <div class="cover_message" ng-show="status==='waiting'">
+    <div class="card">
+      <div class="item">Waiting start time...</div>
+    </div>
+    <button class="button button-block button-assertive" ng-click="onClickStopWait()">
+      Cancel
+    </button>
+  </div>
+  <div class="cover_message" ng-show="status==='watching'">
+    <div class="card">
+      <div class="item">Watching...</div>
+    </div>
+    <button class="button button-block button-assertive" ng-click="onClickStopWatch()">
+      Cancel
+    </button>
+  </div>
+  <div class="cover_message" ng-show="status==='alarming'">
+    <div class="card">
+      <div class="item"><br>In area !!!<br><br></div>
+    </div>
+    <button class="button button-block button-assertive" ng-click="onClickStopAlarm()">
+      Stop alarm
+    </button>
+  </div>
+</div>

@@ -1,6 +1,6 @@
-<div>
-  <div style="width:100%;height:300px" id="map_canvas">
-    <button class="button icon ion-edit button-light" ng-click="onClickEdit(); edit=true" ng-hide="edit"></button>
+<div id="area">
+  <div id="map_canvas">
+    <button id="edit-area" class="button icon ion-edit button-light" ng-click="onClickEdit(); edit=true" ng-hide="edit"></button>
 		<div id="area-buttons">
 			<button class="button icon ion-android-locate button-outline button-dark" ng-click="onClickLocate()"></button>
 			<button class="button icon ion-ios7-location button-outline button-assertive" ng-click="onClickMarker()"></button>
@@ -18,5 +18,5 @@
       <a class="button button-positive" ng-click="onClickOK(); edit=false">OK</a>
     </div>
   </div>
-  <button id="button">Full Screen</button>
+  <!-- <button id="button">Full Screen</button> -->
 </div>
