@@ -3,7 +3,7 @@
 angular.module('AREAlarm')
 
 
-.directive 'areaselect', ($ionicPlatform, mapService) ->
+.directive 'areaselect', ($ionicPlatform, $window, mapService) ->
   return {
     restrict: 'E'
     replace: true
@@ -99,8 +99,21 @@ angular.module('AREAlarm')
 
       return
     ]
-    # link: (scope, element, attrs) ->
-      # return
+    link: (scope, element, attrs) ->
+
+      # defaultHeight = element.children()[0].style.height
+      defaultHeight = 300
+      mapElement = element.children()[0]
+
+      scope.$watch('edit', (newValue) ->
+        if newValue
+          height = $window.innerHeight - 138
+          mapElement.style.height = height+'px'
+        else
+          mapElement.style.height = defaultHeight+'px'
+      )
+
+      return
   }
 
 

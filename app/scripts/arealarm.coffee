@@ -94,6 +94,7 @@ angular.module('AREAlarm')
 
 
   onInArea = ->
+    return if _status isnt 'watching'
     _status = 'alarming'
     vibrateFlag = true
     repeatVibrate = ->

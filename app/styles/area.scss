@@ -2,6 +2,13 @@
   padding: 0 10px;
 }
 
+#area.edit-true {
+  width: 100%;
+  margin: -129px 0 0 0;
+  padding: 0;
+  z-index: 1000;
+}
+
 #map_canvas {
   position: relative;
   width: 100%;
