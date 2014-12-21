@@ -53,6 +53,7 @@
     "org.apache.cordova.statusbar",
     "org.apache.cordova.console",
     "plugin.google.maps",
-    "org.apache.cordova.vibration"
+    "org.apache.cordova.vibration",
+    "https://github.com/christocracy/cordova-plugin-background-geolocation.git"
   ]
 }

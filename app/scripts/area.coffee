@@ -353,33 +353,52 @@ angular.module('AREAlarm')
     marker.setPosition new google.maps.LatLng(latitude, longitude)
     circle.setRadius radius
 
+  @calcDistanceLocation = ->
+    deferred = $q.defer()
+    window.navigator.geolocation.getCurrentPosition(
+      (location) =>
+        @.calcDistanceMarker location.coords.latitude, location.coords.longitude
+          .then((distance) ->
+            deferred.resolve distance
+          )
+      )
+    return deferred.promise
 
-  # Calculate distance of two point
+  # Calculate ditance of position and marker
+  @calcDistanceMarker = (latitude, longitude) ->
+    deferred = $q.defer()
+    _marker.getPosition( (latLng) ->
+      distance = calcDistance latitude, longitude, latLng.lat, latLng.lng
+      deferred.resolve distance
+    )
+    return deferred.promise;
+
+  # Calculate distance of two positions
   # http://emiyou3-tools.appspot.com/geocoding/distance.html
   calcDistance = (lat1, lon1, lat2, lon2) ->
     # ラジアンに変換
-    a_lat = lat1 * Math.PI / 180;
-    a_lon = lon1 * Math.PI / 180;
-    b_lat = lat2 * Math.PI / 180;
-    b_lon = lon2 * Math.PI / 180;
+    a_lat = lat1 * Math.PI / 180
+    a_lon = lon1 * Math.PI / 180
+    b_lat = lat2 * Math.PI / 180
+    b_lon = lon2 * Math.PI / 180
 
     # 緯度の平均、緯度間の差、経度間の差
-    latave = (a_lat + b_lat) / 2;
-    latidiff = a_lat - b_lat;
-    longdiff = a_lon - b_lon;
+    latave = (a_lat + b_lat) / 2
+    latidiff = a_lat - b_lat
+    longdiff = a_lon - b_lon
 
     # 子午線曲率半径
     # 半径を6335439m、離心率を0.006694で設定してます
-    meridian = 6335439 / Math.sqrt(Math.pow(1 - 0.006694 * Math.sin(latave) * Math.sin(latave), 3));    
+    meridian = 6335439 / Math.sqrt(Math.pow(1 - 0.006694 * Math.sin(latave) * Math.sin(latave), 3))
 
     # 卯酉線曲率半径
     # 半径を6378137m、離心率を0.006694で設定してます
-    primevertical = 6378137 / Math.sqrt(1 - 0.006694 * Math.sin(latave) * Math.sin(latave));     
+    primevertical = 6378137 / Math.sqrt(1 - 0.006694 * Math.sin(latave) * Math.sin(latave))
 
    # Hubenyの簡易式
     x = meridian * latidiff;
-    y = primevertical * Math.cos(latave) * longdiff;
+    y = primevertical * Math.cos(latave) * longdiff
 
-    return Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
+    return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
 
   return @

@@ -30,12 +30,18 @@ angular.module('AREAlarm')
 .service 'positionWatcher', ($timeout, mapService) ->
   timeoutWaitStart = timeoutWaitEnd = timeoutWatch = timeoutVibrate = 0
   vibrateFlag = false
+  _radius = 0
+  _status = 'stopping'
+
+  @setRadius = (radius) ->
+    _radius = radius
 
   ###*
    * Start watch position
   ###
   @start = (watchingTime) ->
-    console.log 'Start wathing'
+    console.log 'Start watching'
+    _status = 'watching'
     timeoutWaitEnd = $timeout( ->
       console.log 'end time!!!'
       stopWatchPosition()
@@ -48,6 +54,7 @@ angular.module('AREAlarm')
    * Stop watch position
   ###
   @stop = ->
+    _status = 'stoping'
     $timeout.cancel timeoutWaitStart
     $timeout.cancel timeoutWaitEnd
     $timeout.cancel timeoutWatch
@@ -60,6 +67,7 @@ angular.module('AREAlarm')
    * Wait watch position
   ###
   @wait = (waitTime) ->
+    _status = 'waiting'
     console.log 'waitWatchPosition'
     timeoutWaitStart = $timeout( =>
       console.log 'start time!!!'
@@ -71,20 +79,22 @@ angular.module('AREAlarm')
    * Watch position
   ###
   watch = ->
-    onInArea()
+    return if _status isnt 'watching'
+    mapService.calcDistanceLocation()
+      .then((distance) ->
+        console.log '■Location from Phonegap, distance: ', distance
 
-    return
-    # TODO Get position
+        if distance < _radius
+          onInArea()
+        else
+          timeoutWatch = $timeout(
+            -> watch(),
+          2000)
+      )
 
-    # distance = mapService.calcDistance pos
-    if distance < 0
-      onInArea()
-    else
-      timeoutWatch = $timeout(
-        -> watchPosition(),
-      2000)
 
   onInArea = ->
+    _status = 'alarming'
     vibrateFlag = true
     repeatVibrate = ->
       console.log 'repeatVibrate'

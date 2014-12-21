@@ -49,3 +49,88 @@ angular.module('AREAlarm')
     link: (scope, element, attrs) ->
       return
   }
+
+  
+
+
+.service 'timeService', ->    
+  return {
+    ###*
+     * Is now in start time and end time
+    ###
+    isInTime: (time) ->
+      start = time.start
+      end = time.end
+
+      startNums = (start).split ':'
+      startHourNum = startNums[0]|0
+      startMinNum  = startNums[1]|0
+      startNum = startHourNum * 60 + startMinNum
+
+      endNums = (end).split ':'
+      endHourNum = endNums[0]|0
+      endMinNum  = endNums[1]|0
+      endNum = endHourNum * 60 + endMinNum
+
+      dateObj = new Date()
+      nowHourNum = dateObj.getHours()
+      nowMinNum  = dateObj.getMinutes()
+      nowNum = nowHourNum * 60 + nowMinNum
+
+      if startNum <= endNum and
+         startNum <= nowNum and nowNum <= endNum
+        return true
+      else if startNum > endNum and
+         (startNum <= nowNum or nowNum <= endNum)
+        return true
+
+      return false
+
+    ###*
+     * Calculate time to start time
+    ###
+    calcTime2start: (time) ->
+      start = time.start
+
+      startNums = (start).split ':'
+      startHourNum = startNums[0]|0
+      startMinNum  = startNums[1]|0
+      startNum = startHourNum * 60 + startMinNum
+
+      dateObj = new Date()
+      nowHourNum = dateObj.getHours()
+      nowMinNum  = dateObj.getMinutes()
+      nowNum = nowHourNum * 60 + nowMinNum
+
+      toStart = 0
+      if nowNum <= startNum
+        toStart = (startNum - nowNum)*60*1000
+      else
+        toStart = (24*60-nowNum+startNum)*60*1000
+
+      return toStart
+
+    ###*
+     * Calculate time to end time
+    ###
+    calcTime2end: (time) ->
+      end = time.end
+
+      endNums = (end).split ':'
+      endHourNum = endNums[0]|0
+      endMinNum  = endNums[1]|0
+      endNum = endHourNum * 60 + endMinNum
+
+      dateObj = new Date()
+      nowHourNum = dateObj.getHours()
+      nowMinNum  = dateObj.getMinutes()
+      nowNum = nowHourNum * 60 + nowMinNum
+
+      toEnd = 0
+      if nowNum <= endNum
+        toEnd = (endNum - nowNum)*60*1000
+      else
+        toEnd = (24*60-nowNum+endNum)*60*1000
+
+      return toEnd
+  }
