@@ -1,21 +1,21 @@
-<div id="area" class="edit-{{edit}}">
-  <div id="map_canvas">
-    <button id="edit-area" class="button icon ion-edit button-light" ng-click="onClickEdit(); edit=true" ng-hide="edit"></button>
+<div id="area" class="editing-{{editing}}">
+  <div id="map-canvas">
+    <button id="edit-area" class="button icon ion-edit button-light" ng-click="onClickEdit()" ng-hide="editing"></button>
 		<div id="area-buttons">
 			<button class="button icon ion-android-locate button-outline button-dark" ng-click="onClickLocate()"></button>
 			<button class="button icon ion-ios7-location button-outline button-assertive" ng-click="onClickMarker()"></button>
 	  </div>
   </div>
 
-  <div ng-show="edit">
+  <div ng-show="editing">
     <div class="range range-calm">
       <i class="icon ion-male"></i>
       <input type="range" name="radius" min="200" max="10000" ng-model="radius" ng-change="onChangeRadius(radius)">
       <!-- <i class="icon ion-log-out"></i> -->
     </div>
     <div class="button-bar">
-      <a class="button" ng-click="onClickCancel(); edit=false">Cancel</a>
-      <a class="button button-positive" ng-click="onClickOK(); edit=false">OK</a>
+      <a class="button" ng-click="onClickCancel()">Cancel</a>
+      <a class="button button-positive" ng-click="onClickOK()">OK</a>
     </div>
   </div>
   <!-- <button id="button">Full Screen</button> -->

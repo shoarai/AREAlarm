@@ -46,6 +46,12 @@ angular.module("AREAlarm", [
     $scope.setting.power = false
 
 
+  $scope.editing = false
+
+  # $scope.$watch 'editing', ->
+    # console.log '-----------Watch edit: ', $scope.editing
+  # , true
+
 
   $scope.$watch 'setting', ->
     console.log 'Watch setting: ', $scope.setting

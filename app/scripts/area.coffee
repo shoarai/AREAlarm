@@ -8,21 +8,24 @@ angular.module('AREAlarm')
     restrict: 'E'
     replace: true
     templateUrl: 'templates/area.html'
+    scope: {
+      area: '='
+      editing: '='
+    }
     controller: ['$scope', ($scope) ->
 
       $ionicPlatform.ready ->
         console.log '$ionicPlatform.ready'
 
         # DEBUG
-        # $scope.setting.area =
+        # $scope.area =
         #   latitude: 35.68977383707651
         #   longitude: 139.7002302664307
         #   radius: 400
 
-
-        if $scope.setting? and $scope.setting.area? and $scope.setting.area.latitude?
-          console.log 'Settings area: ', $scope.setting.area
-          mapService.showMap 'map_canvas', $scope.setting.area
+        if $scope.area? and $scope.area.latitude?
+          console.log 'Settings area: ', $scope.area
+          mapService.showMap 'map-canvas', $scope.area
             .then(
               ->
                 onReadyMap()
@@ -37,20 +40,20 @@ angular.module('AREAlarm')
                 mapService.getMyLocation()
                   .then(
                     (position) ->
-                      $scope.setting.area =
+                      $scope.area =
                         latitude: position.latitude
                         longitude: position.longitude
                         radius: 400
                     ->
                       alert 'Not get current postion by GPS'
-                      $scope.setting.area =
+                      $scope.area =
                         latitude: 35.68977383707651
                         longitude: 139.7002302664307
                         radius: 400
                   )
                   .finally(
                     ->
-                      mapService.showArea $scope.setting.area.latitude, $scope.setting.area.longitude, $scope.setting.area.radius
+                      mapService.showArea $scope.area
                         .then(
                           ->
                             console.log 'showed Area'
@@ -62,10 +65,8 @@ angular.module('AREAlarm')
 
       onReadyMap = ->
         console.log 'onReadyMap'
-
-        areaBeforeEdit = $scope.setting.area
-
-        $scope.edit = false
+        areaBeforeEdit = $scope.area
+        $scope.editing = false
 
         $scope.onClickLocate = ->
           console.log 'onClickLocate'
@@ -81,13 +82,14 @@ angular.module('AREAlarm')
 
         $scope.onClickEdit = ->
           console.log 'onClickEdit'
-          $scope.radius = $scope.setting.area.radius
-          areaBeforeEdit = $scope.setting.area
+          areaBeforeEdit = $scope.area
+          $scope.editing = true
 
         $scope.onClickOK = ->
+          $scope.editing = false
           console.log 'onClickOK'
-          $scope.setting.area = mapService.getArea()
-          console.log $scope.setting.area
+          $scope.area = mapService.getArea()
+          console.log $scope.area
 
         $scope.onClickCancel = ->
           console.log 'onClickCancel'
@@ -96,6 +98,7 @@ angular.module('AREAlarm')
               ->
                 mapService.panToArea()
             )
+          $scope.editing = false
 
       return
     ]
@@ -105,7 +108,7 @@ angular.module('AREAlarm')
       defaultHeight = 300
       mapElement = element.children()[0]
 
-      scope.$watch('edit', (newValue) ->
+      scope.$watch('editing', (newValue) ->
         if newValue
           height = $window.innerHeight - 138
           mapElement.style.height = height+'px'
@@ -137,7 +140,6 @@ angular.module('AREAlarm')
 
     mapDiv = document.getElementById id
     if area?
-      console.log 'def', area
       _map = plugin.google.maps.Map.getMap mapDiv, {
           camera:
             latLng: new plugin.google.maps.LatLng area.latitude, area.longitude
@@ -150,7 +152,6 @@ angular.module('AREAlarm')
           @.showArea area
           deferred.resolve()
     else
-      console.log 'nondef'
       _map = plugin.google.maps.Map.getMap mapDiv
       _map.clear()
       _map.on plugin.google.maps.event.MAP_READY,
