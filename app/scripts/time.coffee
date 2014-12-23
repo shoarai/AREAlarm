@@ -14,7 +14,7 @@ angular.module('AREAlarm')
     restrict: 'E'
     replace: true
     scope: {
-      time: '='
+      time: '=time'
     }
     templateUrl: 'templates/time.html'
     controller: ['$scope', ($scope) ->

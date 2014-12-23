@@ -35,7 +35,7 @@ angular.module("AREAlarm", [
 #.controller 'MainCtrl', ($scope, $timeout, $window, storage, initService, timeService, gpsService, mapService) ->
 .controller 'MainCtrl', ($scope, $window, storage, timeService, positionWatcher) ->
   # DEBUG
-  localStorage.clear()
+  # localStorage.clear()
 
 
   $scope.areaEditing = false
