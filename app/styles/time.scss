@@ -1,7 +1,3 @@
-#time-between {
-  padding-top: 1rem;
-}
-
 .col {
   text-align: center;
 }
@@ -18,7 +14,17 @@
 }
 
 #hour {
-  margin: -3px 0;
+  margin: 6px 0 0 0;
+}
+
+#time-between {
+  padding-top: 0.6rem;
+  font-size: 1.0rem;
+}
+
+select {
+  // padding: 0 0 -10px 0;
+  margin: -6px 0 0 0;
 }
 
 select {
@@ -37,10 +43,10 @@ select {
 }
 
 .ion-input-select {
-  width: 90px;
-  font-size: 1.1rem;
+  // width: 90px;
+  font-size: 1.5rem;
   // background-image: url(http://i.imgur.com/nA9xx1X.png);
-  text-indent: 16px;
+  // text-indent: 10px;
   padding: .5rem 0;
 }
 

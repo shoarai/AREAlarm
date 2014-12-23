@@ -1,17 +1,31 @@
 <div id="area" class="editing-{{editing}}">
   <div id="map-canvas">
-    <div id="search" ng-show="editing">
+     <div id="search" ng-show="editing">
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
-        <input type="text" placeholder="Search" ng-keydown="onkeydownSearch($event, $value)">
-      <!-- <button class="button button-small button-icon icon ion-search"> -->
-      <!-- </button> -->
+        <input type="text" placeholder="Search" ng-keydown="onkeydownSearch($event)">
       </label>
     </div>
+
+<!--     <div id="search" class="list" ng-show="editing">
+      <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="Search" ng-model="search" ng-keydown="onkeydownSearch($event)">
+        </label>
+        <button class="button button-small icon ion-search" ng-click="onClickSearch()"></button>
+      </div>
+    </div>
+ -->
+    <!-- <div id="search" class="item item-input-inset" ng-show="editing">
+      <label class="item-input-wrapper">
+        <input type="text" placeholder="Search" ng-keydown="onkeydownSearch($event)">
+      </label>
+      <button class="button button-small icon ion-search"></button>
+    </div> -->
   
     <button id="edit-area" class="button icon ion-edit button-dark" ng-click="onClickEdit()" ng-hide="editing"></button>
 
-    <button id="set-marker" class="button icon-right ion-ios7-location button-positive" ng-click="onClickSetMarker()" ng-show="editing">Set</button>
+    <button id="set-marker" class="button icon-right ion-ios7-location button-assertive" ng-click="onClickSetMarker()" ng-show="editing">Set</button>
 
 		<div id="area-buttons">
 			<button class="button icon ion-android-locate button-outline button-dark" ng-click="onClickLocate()"></button>

@@ -89,7 +89,7 @@ angular.module('AREAlarm')
         else
           timeoutWatch = $timeout(
             -> watch(),
-          2000)
+          5000)
       )
 
 

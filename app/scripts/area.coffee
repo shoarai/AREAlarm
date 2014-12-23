@@ -3,7 +3,7 @@
 angular.module('AREAlarm')
 
 
-.directive 'areaselect', ($ionicPlatform, $window, mapService) ->
+.directive 'areaselect', ($ionicPlatform, $window, mapService, $ionicPopup) ->
   return {
     restrict: 'E'
     replace: true
@@ -95,6 +95,13 @@ angular.module('AREAlarm')
             event.target.blur()
             value = event.target.value
             mapService.searchPosition(value)
+              .catch(->
+                navigator.notification.alert 'Not found', null, 'Error'
+              )
+
+        $scope.onClickSearch = ->
+          console.log $scope.search
+          mapService.searchPosition $scope.search
 
         $scope.onClickSetMarker = ->
           console.log 'onClickSetMarker'
@@ -164,6 +171,8 @@ angular.module('AREAlarm')
           camera:
             latLng: new plugin.google.maps.LatLng area.latitude, area.longitude
             zoom: 13
+          controls:
+            zoom: false
         }
       # Remove all marker
       _map.clear()
@@ -391,8 +400,9 @@ angular.module('AREAlarm')
             zoom: 13
             duration: 1000
           }
+          defer.resolve()
         else
-          alert 'Not found'
+          deferred.reject()
     )
     return deferred.promise
 

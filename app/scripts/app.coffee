@@ -70,8 +70,7 @@ angular.module("AREAlarm", [
       )
       if not daysTotal
         $scope.setting.power = false
-        # TODO notification
-        alert 'Select days at least'
+        navigator.notification.alert 'Select day at least', null, 'Error'
         return
 
       positionWatcher.setRadius $scope.setting.area.radius

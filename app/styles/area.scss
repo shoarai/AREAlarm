@@ -20,12 +20,20 @@
 }
 
 #search {
-  padding: 6px 6px;
+  padding: 6px;
+
+  div {
+    padding: 7px;
+  }
+
+  label {
+    background: #ffffff;
+  }
 }
 
 #set-marker {
   position: absolute;
-  top: 60px;
+  top: 58px;
   right: 6px;
 }
 
