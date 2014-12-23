@@ -68,7 +68,7 @@ angular.module('AREAlarm')
         console.log 'onReadyMap'
         areaBeforeEdit = $scope.area
         $scope.radius = $scope.area.radius
-        $scope.editing = true
+        $scope.editing = false
 
         $scope.onClickLocate = ->
           console.log 'onClickLocate'
@@ -84,6 +84,7 @@ angular.module('AREAlarm')
 
         $scope.onClickEdit = ->
           console.log 'onClickEdit'
+          mapService.editArea()
           areaBeforeEdit = $scope.area
           $scope.editing = true
 
@@ -99,21 +100,25 @@ angular.module('AREAlarm')
           console.log 'onClickSetMarker'
           mapService.setMarkerInCenter()
 
-        $scope.onClickOK = ->
+        finishEdit = ->
+          mapService.finishEditArea()
           $scope.editing = false
+
+        $scope.onClickOK = ->
           console.log 'onClickOK'
+          finishEdit()
           $scope.area = mapService.getArea()
-          console.log $scope.area
+          mapService.panToArea()
 
         $scope.onClickCancel = ->
           console.log 'onClickCancel'
+          finishEdit()
+          $scope.radius = $scope.area.radius
           mapService.showArea areaBeforeEdit
             .then(
               ->
                 mapService.panToArea()
             )
-          $scope.radius = $scope.area.radius
-          $scope.editing = false
 
       return
     ]
@@ -160,6 +165,7 @@ angular.module('AREAlarm')
             latLng: new plugin.google.maps.LatLng area.latitude, area.longitude
             zoom: 13
         }
+      # Remove all marker
       _map.clear()
       _map.on plugin.google.maps.event.MAP_READY,
         (map) =>
@@ -289,7 +295,7 @@ angular.module('AREAlarm')
     deferred = $q.defer()
     _map.addMarker {
       position: new plugin.google.maps.LatLng latitude, longitude
-      draggable: true
+      # draggable: true
     }, (marker) ->
       console.log 'showedMarker: ', marker
       _marker = marker
@@ -345,17 +351,21 @@ angular.module('AREAlarm')
     return distance-radius
 
   # Area editable
-  # @editArea = ->
-  #   tmpLatitude = latitude
-  #   tmpLongitude = longitude
-  #   tmpRadius = radius
+  @editArea = ->
+    _marker.setDraggable true
 
-  #   marker.setDraggable true
-  #   circle.setEditable true
+    # tmpLatitude = latitude
+    # tmpLongitude = longitude
+    # tmpRadius = radius
+
+    # marker.setDraggable true
+    # circle.setEditable true
     # google.maps.event.trigger map, 'resize'
 
   # Area not editable
-  # @fixArea = ->
+  @finishEditArea = ->
+    _marker.setDraggable false
+
   #   marker.setDraggable false
   #   circle.setEditable false
   #   google.maps.event.trigger map, 'resize'
