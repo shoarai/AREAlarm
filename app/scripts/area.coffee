@@ -36,10 +36,10 @@ angular.module('AREAlarm')
           mapService.showMap 'map-canvas'
             .then(
               ->
-                onReadyMap()
                 mapService.getMyLocation()
                   .then(
                     (position) ->
+                      console.log 'Init settings!!'
                       $scope.area =
                         latitude: position.latitude
                         longitude: position.longitude
@@ -53,6 +53,7 @@ angular.module('AREAlarm')
                   )
                   .finally(
                     ->
+                      onReadyMap()
                       mapService.showArea $scope.area
                         .then(
                           ->
