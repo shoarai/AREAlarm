@@ -36,6 +36,14 @@ angular.module("AREAlarm", [
 .controller 'MainCtrl', ($scope, $window, storage, timeService, positionWatcher) ->
   # DEBUG
   # localStorage.clear()
+
+
+  $scope.areaEditing = false
+
+  $scope.$watch 'areaEditing', ->
+    console.log '-----------Watch edit: ', $scope.areaEditing
+  , true
+
   
   console.log 'localStorage: ', localStorage
 
@@ -45,14 +53,6 @@ angular.module("AREAlarm", [
   if not $scope.setting.power?
     $scope.setting.power = false
 
-
-  $scope.editing = false
-
-  # $scope.$watch 'editing', ->
-    # console.log '-----------Watch edit: ', $scope.editing
-  # , true
-
-
   $scope.$watch 'setting', ->
     console.log 'Watch setting: ', $scope.setting
   , true
@@ -60,6 +60,8 @@ angular.module("AREAlarm", [
 
   # Changed power
   $scope.$watch('setting.power', ->
+    console.log $scope.areaEditing
+    
     if $scope.setting.power
       # If all days are false, return
       daysTotal = false

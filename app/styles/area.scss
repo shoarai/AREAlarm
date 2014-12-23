@@ -1,11 +1,13 @@
 #area {
-  padding: 0 10px;
+  margin: 0 20px;
+  // border: solid 1px rgb(20, 95, 215);
+  // border: solid 1px rgb(74, 135, 238);
 }
 
 #area.editing-true {
   width: 100%;
-  margin: -129px 0 0 0;
-  padding: 0;
+  // margin: -129px 0 0 0;
+  margin: 0;
   z-index: 1000;
 }
 
@@ -18,4 +20,17 @@
 #edit-area {
   position: absolute;
   right: 0;
+}
+
+#area-buttons {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+
+  button {
+    border-radius: 32px;
+  }
+  button:not(.activated) {
+    background: rgba(255, 255, 255, 0.8);
+  }
 }

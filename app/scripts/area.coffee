@@ -33,7 +33,7 @@ angular.module('AREAlarm')
         
         else
           console.log 'Init settings'
-          mapService.showMap 'map_canvas'
+          mapService.showMap 'map-canvas'
             .then(
               ->
                 onReadyMap()
@@ -66,6 +66,7 @@ angular.module('AREAlarm')
       onReadyMap = ->
         console.log 'onReadyMap'
         areaBeforeEdit = $scope.area
+        $scope.radius = $scope.area.radius
         $scope.editing = false
 
         $scope.onClickLocate = ->
@@ -98,6 +99,7 @@ angular.module('AREAlarm')
               ->
                 mapService.panToArea()
             )
+          $scope.radius = $scope.area.radius
           $scope.editing = false
 
       return
@@ -110,7 +112,7 @@ angular.module('AREAlarm')
 
       scope.$watch('editing', (newValue) ->
         if newValue
-          height = $window.innerHeight - 138
+          height = $window.innerHeight - 140
           mapElement.style.height = height+'px'
         else
           mapElement.style.height = defaultHeight+'px'

@@ -25,21 +25,23 @@
       <ion-header-bar class="bar-stable">
         <h1 class="title">AREAlarm</h1>
         <label class="toggle">
-          <input type="checkbox" ng-model="setting.power">
+          <input type="checkbox" ng-model="setting.power" ng-disabled="areaEditing">
           <div class="track">
             <div class="handle"></div>
           </div>
         </label>
+        <!-- <button class="button button-icon icon ion-refresh" onclick="location.reload()"></button> -->
         <button class="button button-clear button-positive" onclick="location.reload()">Reload</button>
+        <!-- <button class="button button-icon icon ion-power"></button> -->
       </ion-header-bar>
-<!--       <div class="bar bar-subheader bar-positive">
-        <h2 class="title">Sub Header</h2>
-      </div> -->
+<!--       <ion-header-bar class="bar-subheader bar-positive" ng-if="setting.power">
+        <h1 class="title">Sub Header</h1>
+      </ion-header-bar> -->
       <ion-content>
         <cover></cover>
-        <timeselect></timeselect>
-        <areaselect area="setting.area" editing="editing"></areaselect>
-        <alarmselect></alarmselect>
+        <timeselect ng-hide="areaEditing"></timeselect>
+        <areaselect area="setting.area" editing="areaEditing"></areaselect>
+        <alarmselect ng-hide="areaEditing"></alarmselect>
       </ion-content>
     </ion-pane>
 

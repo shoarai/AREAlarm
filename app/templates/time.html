@@ -9,17 +9,20 @@
     <a class="button" ng-class="isDayTure(setting.time.days[0])" ng-click="setting.time.days[0]=!setting.time.days[0]">日</a>
   </div>
 
-  <div class="row">
+  <div id="hour" class="row">
     <div class="col">
-      <label>Start Time
-      <select timepicker class="ion-input-select" ng-model="setting.time.start"></select>    
-      </label>
+<!--       <label>Start
+      <i class="icon ion-clock"></i> -->
+      <select timepicker class="ion-input-select" ng-model="setting.time.start"></select>
+      <!-- </label> -->
+
     </div>
     <div id="time-between" class="col">〜</div>
     <div class="col">
-      <label>End Time
+<!--       <label>End Time
+      <i class="icon ion-clock"></i> -->
       <select timepicker class="ion-input-select" ng-model="setting.time.end"></select>
-      </label>
+      <!-- </label> -->
     </div>
   </div>
 </div>

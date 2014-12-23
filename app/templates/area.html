@@ -1,6 +1,6 @@
 <div id="area" class="editing-{{editing}}">
   <div id="map-canvas">
-    <button id="edit-area" class="button icon ion-edit button-light" ng-click="onClickEdit()" ng-hide="editing"></button>
+    <button id="edit-area" class="button icon ion-edit button-dark" ng-click="onClickEdit()" ng-hide="editing"></button>
 		<div id="area-buttons">
 			<button class="button icon ion-android-locate button-outline button-dark" ng-click="onClickLocate()"></button>
 			<button class="button icon ion-ios7-location button-outline button-assertive" ng-click="onClickMarker()"></button>
@@ -10,7 +10,7 @@
   <div ng-show="editing">
     <div class="range range-calm">
       <i class="icon ion-male"></i>
-      <input type="range" name="radius" min="200" max="10000" ng-model="radius" ng-change="onChangeRadius(radius)">
+      <input type="range" name="radius" min="200" max="5000" ng-model="radius" ng-change="onChangeRadius(radius)">
       <!-- <i class="icon ion-log-out"></i> -->
     </div>
     <div class="button-bar">
