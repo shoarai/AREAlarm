@@ -13,23 +13,22 @@ angular.module('AREAlarm')
   return {
     restrict: 'E'
     replace: true
-    scope: true
+    scope: {
+      time: '='
+    }
     templateUrl: 'templates/time.html'
     controller: ['$scope', ($scope) ->
-      if not $scope.setting?
-        $scope.setting = {}
+      if not $scope.time?
+        $scope.time = {}
 
-      if not $scope.setting.time?
-        $scope.setting.time = {}
+      if not $scope.time.days?
+        $scope.time.days = [false, true, true, true, true, true, false]
 
-      if not $scope.setting.time.days?
-        $scope.setting.time.days = [false, true, true, true, true, true, false]
+      if not $scope.time.start?
+        $scope.time.start = '8:00'
 
-      if not $scope.setting.time.start?
-        $scope.setting.time.start = '8:00'
-
-      if not $scope.setting.time.end?
-        $scope.setting.time.end = '9:00'
+      if not $scope.time.end?
+        $scope.time.end = '9:00'
 
 
       $scope.isDayTure = (day) ->
@@ -45,12 +44,8 @@ angular.module('AREAlarm')
 
 .directive 'timepicker', ->
   return {
-    templateUrl: 'templates/timepicker.html',
-    link: (scope, element, attrs) ->
-      return
+    templateUrl: 'templates/timepicker.html'
   }
-
-  
 
 
 .service 'timeService', ->    
