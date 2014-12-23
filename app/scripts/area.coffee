@@ -68,7 +68,7 @@ angular.module('AREAlarm')
         console.log 'onReadyMap'
         areaBeforeEdit = $scope.area
         $scope.radius = $scope.area.radius
-        $scope.editing = false
+        $scope.editing = true
 
         $scope.onClickLocate = ->
           console.log 'onClickLocate'
@@ -86,6 +86,18 @@ angular.module('AREAlarm')
           console.log 'onClickEdit'
           areaBeforeEdit = $scope.area
           $scope.editing = true
+
+        $scope.onkeydownSearch = (event) ->
+          console.log 'onkeydownSearch: ', event.target.value
+          if event.which is 13
+            console.log 'enter key'
+            event.target.blur()
+            value = event.target.value
+            mapService.searchPosition(value)
+
+        $scope.onClickSetMarker = ->
+          console.log 'onClickSetMarker'
+          mapService.setMarkerInCenter()
 
         $scope.onClickOK = ->
           $scope.editing = false
@@ -151,7 +163,7 @@ angular.module('AREAlarm')
       _map.clear()
       _map.on plugin.google.maps.event.MAP_READY,
         (map) =>
-          console.log 'onMapReady'
+          console.log 'onMapReady, map: ', map
           @.showArea area
           deferred.resolve()
     else
@@ -235,9 +247,9 @@ angular.module('AREAlarm')
       (latLng) ->
         console.log 'Pan to marker: ', latLng.lat, latLng.lng
         _map.animateCamera {
-          'target': new plugin.google.maps.LatLng latLng.lat, latLng.lng
-          'zoom': 13
-          'duration': 1000
+          target: new plugin.google.maps.LatLng latLng.lat, latLng.lng
+          zoom: 13
+          duration: 1000
         }
     )
     # map.panTo marker.position
@@ -332,43 +344,63 @@ angular.module('AREAlarm')
     distance = calcDistance pos.latitude, pos.longitude, latitude, longitude
     return distance-radius
 
-  # Set position
-  @setPosition = (pos) ->
-    pointPos = new google.maps.LatLng pos.latitude, pos.longitude
-    marker = new google.maps.Marker
-      position: pointPos
-      map: map
-      icon:
-        path: google.maps.SymbolPath.CIRCLE
-        scale: 10
-    return null
-
-
-
   # Area editable
-  tmpLatitude = tmpLongitude = tmpRadius = false
-  @editArea = ->
-    tmpLatitude = latitude
-    tmpLongitude = longitude
-    tmpRadius = radius
+  # @editArea = ->
+  #   tmpLatitude = latitude
+  #   tmpLongitude = longitude
+  #   tmpRadius = radius
 
-    marker.setDraggable true
-    circle.setEditable true
-    google.maps.event.trigger map, 'resize'
+  #   marker.setDraggable true
+  #   circle.setEditable true
+    # google.maps.event.trigger map, 'resize'
 
   # Area not editable
-  @fixArea = ->
-    marker.setDraggable false
-    circle.setEditable false
-    google.maps.event.trigger map, 'resize'
+  # @fixArea = ->
+  #   marker.setDraggable false
+  #   circle.setEditable false
+  #   google.maps.event.trigger map, 'resize'
 
  # Cancel editing area
-  @cancelEdit = ->
-    latitude = tmpLatitude
-    longitude = tmpLongitude
-    radius = tmpRadius
-    marker.setPosition new google.maps.LatLng(latitude, longitude)
-    circle.setRadius radius
+  # @cancelEdit = ->
+  #   latitude = tmpLatitude
+  #   longitude = tmpLongitude
+  #   radius = tmpRadius
+  #   marker.setPosition new google.maps.LatLng(latitude, longitude)
+  #   circle.setRadius radius
+
+  @searchPosition = (address) ->
+    deferred = $q.defer()
+    plugin.google.maps.Geocoder.geocode({address:address},
+      (results) ->
+        if results.length
+          result = results[0];
+          position = result.position; 
+
+          _map.animateCamera {
+            target: position
+            zoom: 13
+            duration: 1000
+          }
+        else
+          alert 'Not found'
+    )
+    return deferred.promise
+
+  @setMarkerInCenter = ->
+    _map.getCameraPosition(
+      (camera) ->
+        latLng = camera.target
+        _marker.setPosition latLng
+        _circle.setCenter latLng
+
+        # var buff = ["Current camera position:\n",
+        #     "latitude:" + camera.target.lat,
+        #     "longitude:" + camera.target.lng,
+        #     "zoom:" + camera.zoom,
+        #     "tilt:" + camera.tilt,
+        #     "bearing:" + camera.bearing].join("\n");
+        # alert(buff);
+    )
 
   @calcDistanceLocation = ->
     deferred = $q.defer()
