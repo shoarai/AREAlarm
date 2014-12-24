@@ -109,12 +109,48 @@ angular.module('AREAlarm')
     return 10000 if distance > 500
     return 5000
 
+  _self = @
+
   ###*
    * In area, alarm
   ###
   _onInArea = ->
     return if _status isnt 'watching'
     _status = 'alarming'
+    
+    console.log window.plugin.notification
+    console.log window.plugin.notification.local
+    console.log window.plugin.notification.local.promptForPermission
+    
+    window.plugin.notification.local.onadd = (id, state, json) ->
+      console.log 'onadd: ', id, state, json
+
+
+    window.plugin.notification.local.ontrigger = (id, state, json) ->
+      console.log 'ontrigger: ', id, state, json
+
+    window.plugin.notification.local.onclick = (id, state, json) ->
+      console.log 'onclick: ', id, state, json
+      if id is '1'
+        _self.stop()
+        # _self.wait()
+
+    window.plugin.notification.local.add({
+        id:      1
+        title:   'In area'
+        message: 'Click to stop notification'
+        autoCancel: true
+        # repeat:  'weekly',
+        # date:    new Date().getTime()
+    })
+
+    # window.plugin.notification.local.hasPermission((granted) ->
+      # console.log('Permission has been granted: ' + granted)
+    # )
+      
+    # window.plugin.notification.local.promptForPermission()
+    # return
+
     vibrateFlag = true
     repeatVibrate = ->
       console.log 'repeatVibrate'

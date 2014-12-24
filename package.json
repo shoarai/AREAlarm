@@ -54,6 +54,8 @@
     "org.apache.cordova.console",
     "plugin.google.maps",
     "org.apache.cordova.vibration",
-    "https://github.com/christocracy/cordova-plugin-background-geolocation.git"
+    "https://github.com/christocracy/cordova-plugin-background-geolocation.git",
+    "https://github.com/katzer/cordova-plugin-local-notifications.git",
+    "de.appplant.cordova.plugin.local-notification@0.7.6"
   ]
 }
