@@ -243,13 +243,23 @@ angular.module('AREAlarm')
    * Pan to my location
   ###
   @panToMyLocation = ->
+    window.navigator.geolocation.getCurrentPosition(
+      (location) =>
+          _map.animateCamera {
+            target: new plugin.google.maps.LatLng location.coords.latitude, location.coords.longitude
+            zoom: 13
+            duration: 1000
+          }
+      )
+    return
+
     @.getMyLocation()
       .then(
         (position) ->
           _map.animateCamera {
-            'target': new plugin.google.maps.LatLng position.latitude, position.longitude
-            'zoom': 13
-            'duration': 1000
+            target: new plugin.google.maps.LatLng position.latitude, position.longitude
+            zoom: 13
+            duration: 1000
           }
       )
     return
