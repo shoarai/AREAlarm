@@ -33,11 +33,16 @@ angular.module('AREAlarm')
   _radius = 0
   _status = 'stopping'
 
+  ###*
+   * Set radius of area
+   * @param {number} radius Radius of area
+  ###
   @setRadius = (radius) ->
     _radius = radius
 
   ###*
    * Start watch position
+   * @param {number} watchingTime Watching time(time to end)
   ###
   @start = (watchingTime) ->
     console.log 'Start watching'
@@ -47,7 +52,7 @@ angular.module('AREAlarm')
       stopWatchPosition()
     , watchingTime)
 
-    watch()
+    _watch()
     return @
 
   ###*
@@ -78,22 +83,36 @@ angular.module('AREAlarm')
   ###*
    * Watch position
   ###
-  watch = ->
+  _watch = ->
     return if _status isnt 'watching'
     mapService.calcDistanceLocation()
       .then((distance) ->
         console.log '■Location from Phonegap, distance: ', distance
 
         if distance < _radius
-          onInArea()
+          _onInArea()
         else
+          nextTime = _calcNextTimeByDistance distance
           timeoutWatch = $timeout(
             -> watch(),
-          5000)
+          nextTime)
       )
 
+  ###*
+   * Calculate next time to watch may location from distance
+  ###
+  _calcNextTimeByDistance = (distance) ->
+    # return　[msec] if [m] > [m]
+    return 60000 if distance > 3000
+    return 30000 if distance > 1500
+    return 20000 if distance > 1000
+    return 10000 if distance > 500
+    return 5000
 
-  onInArea = ->
+  ###*
+   * In area, alarm
+  ###
+  _onInArea = ->
     return if _status isnt 'watching'
     _status = 'alarming'
     vibrateFlag = true
