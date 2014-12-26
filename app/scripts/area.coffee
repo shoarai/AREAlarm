@@ -371,6 +371,7 @@ angular.module('AREAlarm')
 
   # Area editable
   @editArea = ->
+    _map.setClickable true
     _marker.setDraggable true
 
     # tmpLatitude = latitude
@@ -383,6 +384,7 @@ angular.module('AREAlarm')
 
   # Area not editable
   @finishEditArea = ->
+    _map.setClickable false
     _marker.setDraggable false
 
   #   marker.setDraggable false

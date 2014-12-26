@@ -87,3 +87,7 @@ angular.module("AREAlarm", [
     else
       positionWatcher.stop()
   )
+
+  $scope.isPowerOn = (power) ->
+    return 'bar-positive' if power
+    return 'bar-stable'
