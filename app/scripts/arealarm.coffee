@@ -8,6 +8,17 @@ angular.module('AREAlarm')
     replace: true
     templateUrl: 'templates/cover.html'
     controller: ['$scope', ($scope) ->
+
+      # $scope.status = 'stopping'
+
+      positionWatcher.setScopeStatus((status) ->
+        $scope.status = status
+      )
+
+      $scope.$watch('status', ->
+        console.log 'status---------------', $scope.status
+      )
+
       $scope.onClickStopWait = ->
         console.log 'onClickStopWait'
         $scope.setting.power = false
@@ -33,6 +44,16 @@ angular.module('AREAlarm')
   _radius = 0
   _status = 'stopping'
 
+
+  _setStatus = ->
+    return
+
+  @setScopeStatus = (setStatus) ->
+    _setStatus = (status) ->
+      _status = status
+      setStatus status
+
+
   ###*
    * Set radius of area
    * @param {number} radius Radius of area
@@ -47,6 +68,7 @@ angular.module('AREAlarm')
   @start = (watchingTime) ->
     console.log 'Start watching'
     _status = 'watching'
+    _setStatus 'watching'
     timeoutWaitEnd = $timeout( ->
       console.log 'end time!!!'
       stopWatchPosition()
@@ -60,6 +82,7 @@ angular.module('AREAlarm')
   ###
   @stop = ->
     _status = 'stoping'
+    _setStatus 'stoping'
     $timeout.cancel timeoutWaitStart
     $timeout.cancel timeoutWaitEnd
     $timeout.cancel timeoutWatch
@@ -73,6 +96,7 @@ angular.module('AREAlarm')
   ###
   @wait = (waitTime) ->
     _status = 'waiting'
+    _setStatus 'waiting'
     console.log 'waitWatchPosition'
     timeoutWaitStart = $timeout( =>
       console.log 'start time!!!'
@@ -117,7 +141,7 @@ angular.module('AREAlarm')
   _onInArea = ->
     return if _status isnt 'watching'
     _status = 'alarming'
-    
+    _setStatus 'alarming'
     console.log window.plugin.notification
     console.log window.plugin.notification.local
     console.log window.plugin.notification.local.promptForPermission
