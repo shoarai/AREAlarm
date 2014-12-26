@@ -22,7 +22,7 @@
   <body ng-app="AREAlarm">
 
     <ion-pane ng-controller="MainCtrl">
-      <ion-header-bar ng-class="isPowerOn(setting.power)">
+      <ion-header-bar ng-class="isPowerOn(setting.power,'bar-')">
         <h1 class="title">AREAlarm</h1>
 <!--         <label class="toggle">
           <input type="checkbox" ng-model="setting.power" ng-disabled="areaEditing">
@@ -31,7 +31,7 @@
           </div>
         </label> -->
         <button class="button button-clear button-positive" onclick="location.reload()">Reload</button>
-        <button class="button button-icon icon ion-power onclick=" ng-click="setting.power=!setting.power"></button>
+        <button id="toggle-power" class="button icon ion-power" ng-class="isPowerOn(!setting.power,'button-')" ng-click="setting.power=!setting.power"></button>
       </ion-header-bar>
       <ion-content>
         <cover></cover>

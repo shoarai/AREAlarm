@@ -88,6 +88,6 @@ angular.module("AREAlarm", [
       positionWatcher.stop()
   )
 
-  $scope.isPowerOn = (power) ->
-    return 'bar-positive' if power
-    return 'bar-stable'
+  $scope.isPowerOn = (power, prefix) ->
+    return prefix+'positive' if power
+    return prefix+'stable'
