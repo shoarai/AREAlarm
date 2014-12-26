@@ -1,4 +1,4 @@
-<div id="cover" ng-show="setting.power">
+<div id="cover">
   <div id="watching" ng-show="status==='waiting'">
     <div class="card">
       <div class="item">
@@ -21,7 +21,7 @@
   </div>
   <div id="alarming" ng-show="status==='alarming'">
     <button id="stop-alarm" class="button button-large button-assertive" ng-click="onClickStopAlarm()">
-      <i class="icon ion-alert"></i><br>
+      In AREA <i class="icon ion-alert"></i><br>
       Stop alarm
     </button>
   </div>

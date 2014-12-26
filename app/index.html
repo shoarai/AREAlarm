@@ -34,7 +34,7 @@
         <button id="toggle-power" class="button icon ion-power" ng-class="isPowerOn(!setting.power,'button-')" ng-click="setting.power=!setting.power"></button>
       </ion-header-bar>
       <ion-content>
-        <cover></cover>
+        <cover ng-show="setting.power"></cover>
         <timeselect time="setting.time" ng-hide="areaEditing"></timeselect>
         <areaselect area="setting.area" editing="areaEditing"></areaselect>
         <!-- <alarmselect ng-hide="areaEditing"></alarmselect> -->

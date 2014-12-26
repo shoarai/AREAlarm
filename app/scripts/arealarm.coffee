@@ -2,7 +2,7 @@
 
 angular.module('AREAlarm')
 
-.directive 'cover', (timeService, positionWatcher) ->
+.directive 'cover', ($ionicPlatform, timeService, positionWatcher) ->
   return {
     restrict: 'E'
     replace: true
@@ -18,6 +18,21 @@ angular.module('AREAlarm')
         $scope.status = status
       )
 
+
+      $ionicPlatform.ready ->
+        window.plugin.notification.local.onclick = (id, state, json) ->
+          console.log 'onclick: ', id, state, json
+          if id is '1'
+            _restartWatching()
+
+      _waitWatching = ->
+        waitTime = timeService.calcTime2start $scope.setting.time
+        positionWatcher.wait waitTime
+
+      _restartWatching = ->
+        positionWatcher.stop()
+        _waitWatching()
+
       $scope.onClickStopWait = ->
         console.log 'onClickStopWait'
         $scope.setting.power = false
@@ -27,9 +42,7 @@ angular.module('AREAlarm')
         $scope.setting.power = false
 
       $scope.onClickStopAlarm = ->
-        positionWatcher.stop()
-        waitTime = timeService.calcTime2start $scope.setting.time
-        positionWatcher.wait waitTime
+        _restartWatching()
 
       return
     ]
@@ -148,10 +161,10 @@ angular.module('AREAlarm')
     window.plugin.notification.local.ontrigger = (id, state, json) ->
       console.log 'ontrigger: ', id, state, json
 
-    window.plugin.notification.local.onclick = (id, state, json) ->
-      console.log 'onclick: ', id, state, json
-      if id is '1'
-        _self.stop()
+    # window.plugin.notification.local.onclick = (id, state, json) ->
+    #   console.log 'onclick: ', id, state, json
+    #   if id is '1'
+    #     _self.stop()
         # _self.wait()
 
     window.plugin.notification.local.add({
