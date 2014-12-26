@@ -1,25 +1,27 @@
 <div id="cover" ng-show="setting.power">
-  <div class="cover_message" ng-show="status==='waiting'">
+  <div id="watching" ng-show="status==='waiting'">
     <div class="card">
-      <div class="item">Waiting start time...</div>
+      <div class="item">
+        Waiting start time
+        <button class="button button-block button-calm" ng-click="onClickStopWait()">
+          Stop
+        </button>
+      </div>
     </div>
-    <button class="button button-block button-assertive" ng-click="onClickStopWait()">
-      Cancel
-    </button>
   </div>
-  <div class="cover_message" ng-show="status==='watching'">
+  <div id="watching" ng-show="status==='watching'">
     <div class="card">
-      <div class="item">Watching...</div>
+      <div class="item">
+        Traking position...
+        <button class="button button-block button-calm" ng-click="onClickStopWatch()">
+          Stop
+        </button>
+      </div>
     </div>
-    <button class="button button-block button-assertive" ng-click="onClickStopWatch()">
-      Cancel
-    </button>
   </div>
-  <div class="cover_message" ng-show="status==='alarming'">
-    <div class="card">
-      <div class="item"><br>In area !!!<br><br></div>
-    </div>
-    <button class="button button-block button-assertive" ng-click="onClickStopAlarm()">
+  <div id="alarming" ng-show="status==='alarming'">
+    <button id="stop-alarm" class="button button-large button-assertive" ng-click="onClickStopAlarm()">
+      <i class="icon ion-alert"></i><br>
       Stop alarm
     </button>
   </div>

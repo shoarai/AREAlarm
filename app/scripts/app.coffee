@@ -60,7 +60,7 @@ angular.module("AREAlarm", [
 
   # Changed power
   $scope.$watch('setting.power', ->
-    console.log $scope.areaEditing
+    console.log '$scope.$watch.setting.power areaEditing: ', $scope.areaEditing
     
     if $scope.setting.power
       # If all days are false, return

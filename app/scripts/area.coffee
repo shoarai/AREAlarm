@@ -171,9 +171,8 @@ angular.module('AREAlarm')
           camera:
             latLng: new plugin.google.maps.LatLng area.latitude, area.longitude
             zoom: 13
-          controls:
-            zoom: false
         }
+      _map.setClickable false
       # Remove all marker
       _map.clear()
       _map.on plugin.google.maps.event.MAP_READY,

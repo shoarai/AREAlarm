@@ -9,14 +9,13 @@ angular.module('AREAlarm')
     templateUrl: 'templates/cover.html'
     controller: ['$scope', ($scope) ->
 
-      # $scope.status = 'stopping'
+      $scope.status = 'stopping'
+      $scope.$watch('status', ->
+        console.log 'status---------------', $scope.status
+      )
 
       positionWatcher.setScopeStatus((status) ->
         $scope.status = status
-      )
-
-      $scope.$watch('status', ->
-        console.log 'status---------------', $scope.status
       )
 
       $scope.onClickStopWait = ->
@@ -67,7 +66,6 @@ angular.module('AREAlarm')
   ###
   @start = (watchingTime) ->
     console.log 'Start watching'
-    _status = 'watching'
     _setStatus 'watching'
     timeoutWaitEnd = $timeout( ->
       console.log 'end time!!!'
@@ -81,7 +79,6 @@ angular.module('AREAlarm')
    * Stop watch position
   ###
   @stop = ->
-    _status = 'stoping'
     _setStatus 'stoping'
     $timeout.cancel timeoutWaitStart
     $timeout.cancel timeoutWaitEnd
@@ -95,7 +92,6 @@ angular.module('AREAlarm')
    * Wait watch position
   ###
   @wait = (waitTime) ->
-    _status = 'waiting'
     _setStatus 'waiting'
     console.log 'waitWatchPosition'
     timeoutWaitStart = $timeout( =>
@@ -140,11 +136,10 @@ angular.module('AREAlarm')
   ###
   _onInArea = ->
     return if _status isnt 'watching'
-    _status = 'alarming'
     _setStatus 'alarming'
-    console.log window.plugin.notification
-    console.log window.plugin.notification.local
-    console.log window.plugin.notification.local.promptForPermission
+    # console.log window.plugin.notification
+    # console.log window.plugin.notification.local
+    # console.log window.plugin.notification.local.promptForPermission
     
     window.plugin.notification.local.onadd = (id, state, json) ->
       console.log 'onadd: ', id, state, json

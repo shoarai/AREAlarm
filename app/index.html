@@ -23,7 +23,6 @@
 
     <ion-pane ng-controller="MainCtrl">
       <ion-header-bar ng-class="isPowerOn(setting.power,'bar-')">
-        <h1 class="title">AREAlarm</h1>
 <!--         <label class="toggle">
           <input type="checkbox" ng-model="setting.power" ng-disabled="areaEditing">
           <div class="track">
@@ -31,6 +30,7 @@
           </div>
         </label> -->
         <button class="button button-clear button-positive" onclick="location.reload()">Reload</button>
+        <h1 class="title">AREAlarm</h1>
         <button id="toggle-power" class="button icon ion-power" ng-class="isPowerOn(!setting.power,'button-')" ng-click="setting.power=!setting.power"></button>
       </ion-header-bar>
       <ion-content>
