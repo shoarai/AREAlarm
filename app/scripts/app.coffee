@@ -77,7 +77,10 @@ angular.module("AREAlarm", [
 
       # If here is in area, start watching position
       # If not, wait start time
-      if timeService.isInTime $scope.setting.time
+
+      # first iteration
+      if true
+      # if timeService.isInTime $scope.setting.time
         toEnd = timeService.calcTime2end $scope.setting.time
         positionWatcher.start toEnd
       else

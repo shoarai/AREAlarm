@@ -30,8 +30,11 @@ angular.module('AREAlarm')
         positionWatcher.wait waitTime
 
       _restartWatching = ->
-        positionWatcher.stop()
-        _waitWatching()
+        # first iteration
+        $scope.setting.power = false
+        # positionWatcher.stop()
+        # _waitWatching()
+        return
 
       $scope.onClickStopWait = ->
         console.log 'onClickStopWait'
@@ -140,7 +143,7 @@ angular.module('AREAlarm')
         else
           nextTime = _calcNextTimeByDistance distance
           timeoutWatch = $timeout(
-            -> watch(),
+            -> _watch(),
           nextTime)
       )
 

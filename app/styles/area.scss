@@ -5,6 +5,11 @@
   border-radius: 12px;
 }
 
+// first iteration
+#area {
+  margin-top: 20px;
+}
+
 #area.editing-true {
   width: 100%;
   // margin: -129px 0 0 0;
@@ -52,8 +57,9 @@
 
   button {
     border-radius: 50%;
-  }
-  button:not(.activated) {
-    background: rgba(255, 255, 255, 0.8);
+  
+    &:not(.activated) {
+      background: rgba(255, 255, 255, 0.8);
+    }
   }
 }

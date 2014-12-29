@@ -15,6 +15,7 @@
     <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="styles/time.css">
     <link rel="stylesheet" href="styles/area.css">
+    <link rel="stylesheet" href="styles/cover.css">
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
@@ -30,13 +31,16 @@
           </div>
         </label> -->
         <a license class="button button-icon icon ion-navicon"></a>
+        <!-- <a license class="button button-icon icon ion-information-circled"></a> -->
         <button class="button button-clear button-assertive" onclick="location.reload()">Reload</button>
         <h1 class="title">AREAlarm</h1>
         <button id="toggle-power" class="button icon ion-power" ng-class="isPowerOn(!setting.power,'button-')" ng-click="setting.power=!setting.power"></button>
       </ion-header-bar>
+
       <ion-content>
         <cover ng-show="setting.power"></cover>
-        <timeselect time="setting.time" ng-hide="areaEditing"></timeselect>
+        <!-- first -->
+        <!-- <timeselect time="setting.time" ng-hide="areaEditing"></timeselect> -->
         <areaselect area="setting.area" editing="areaEditing"></areaselect>
         <!-- <alarmselect ng-hide="areaEditing"></alarmselect> -->
         <!-- <div>
