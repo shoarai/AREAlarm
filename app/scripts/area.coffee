@@ -153,6 +153,20 @@ angular.module('AREAlarm')
   _map = _marker = _circle = {}
 
   ###*
+   * Get license Infomation
+   * @return {[type]}
+  ###
+  @getLicenseInfo = ->
+    deferred = $q.defer()
+    _map.getLicenseInfo((txt, txt1) ->
+      # Until v1.1.5, the plugin passes the text to txt1.
+      # As of v1.2.0, the plugin passes the text to txt.
+      console.log 'License text: ', {txt, txt1}
+      deferred.resolve(txt || txt1)
+    )
+    return deferred.promise
+
+  ###*
    * Show map
    * @param  {string} id    Element id
    * @param  {object} area  area

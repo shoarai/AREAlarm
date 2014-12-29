@@ -64,7 +64,7 @@ angular.module('AREAlarm')
     _setStatus = (status) ->
       _status = status
       setStatus status
-
+    @
 
   ###*
    * Set radius of area
@@ -107,10 +107,23 @@ angular.module('AREAlarm')
   @wait = (waitTime) ->
     _setStatus 'waiting'
     console.log 'waitWatchPosition'
-    timeoutWaitStart = $timeout( =>
-      console.log 'start time!!!'
-      @.start()
-    , waitTime)
+    now = new Date().getTime()
+    date = new Date(now + waitTime)
+    window.plugin.notification.local.add({
+        id: 2
+        title: 'Start time'
+        autoCancel: true
+        date: date
+    })
+
+    window.plugin.notification.local.onclick = (id, state, json) ->
+      console.log 'onclick: ', id, state, json
+      if id is '2'
+        navigator.vibrate 5000
+    # timeoutWaitStart = $timeout( =>
+    #   console.log 'start time!!!'
+    #   @.start()
+    # , waitTime)
     return @
 
   ###*
@@ -168,8 +181,8 @@ angular.module('AREAlarm')
         # _self.wait()
 
     window.plugin.notification.local.add({
-        id:      1
-        title:   'In area'
+        id: 1
+        title: 'In area'
         message: 'Click to stop notification'
         autoCancel: true
         # repeat:  'weekly',
