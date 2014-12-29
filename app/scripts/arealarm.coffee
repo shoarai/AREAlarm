@@ -10,9 +10,8 @@ angular.module('AREAlarm')
     controller: ['$scope', ($scope) ->
 
       $scope.status = 'stopping'
-      $scope.$watch('status', ->
-        console.log 'status---------------', $scope.status
-      )
+      $scope.$watch 'status', ->
+        console.log 'status watch:', $scope.status
 
       positionWatcher.setScopeStatus((status) ->
         $scope.status = status

@@ -24,24 +24,18 @@
 
     <ion-pane ng-controller="MainCtrl">
       <ion-header-bar ng-class="isPowerOn(setting.power,'bar-')">
-<!--         <label class="toggle">
-          <input type="checkbox" ng-model="setting.power" ng-disabled="areaEditing">
-          <div class="track">
-            <div class="handle"></div>
-          </div>
-        </label> -->
-        <a license class="button button-icon icon ion-navicon"></a>
-        <!-- <a license class="button button-icon icon ion-information-circled"></a> -->
-        <button class="button button-clear button-assertive" onclick="location.reload()">Reload</button>
-        <h1 class="title">AREAlarm</h1>
-        <button id="toggle-power" class="button icon ion-power" ng-class="isPowerOn(!setting.power,'button-')" ng-click="setting.power=!setting.power"></button>
+        <a license class="button button-icon icon ion-navicon" ng-hide="setting.power||areaEditing"></a>
+        <!-- <button class="button button-clear button-assertive" onclick="location.reload()">Reload</button> -->
+        <h1 class="title" ng-hide="areaEditing">AREAlarm</h1>
+        <h1 class="title" ng-show="areaEditing">Area setting</h1>
+        <button id="toggle-power" class="button icon ion-power" ng-class="isPowerOn(!setting.power,'button-')" ng-hide="areaEditing" ng-click="setting.power=!setting.power"></button>
       </ion-header-bar>
 
       <ion-content>
         <cover ng-show="setting.power"></cover>
         <!-- first -->
         <!-- <timeselect time="setting.time" ng-hide="areaEditing"></timeselect> -->
-        <areaselect area="setting.area" editing="areaEditing"></areaselect>
+        <areaselect area="setting.area" editing="areaEditing" toggle-edit="onToggleEditArea()"></areaselect>
         <!-- <alarmselect ng-hide="areaEditing"></alarmselect> -->
         <!-- <div>
           <button class="button button-block button-positive">Start</button>

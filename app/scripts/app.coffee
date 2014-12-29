@@ -21,12 +21,6 @@ angular.module("AREAlarm", [
     # org.apache.cordova.statusbar required
     StatusBar.styleDefault()  if window.StatusBar
 
-    # button = document.getElementById("button")
-    # button.addEventListener("click", onBtnClicked, false)
-
-    # onBtnClicked = ->
-      # map.showDialog()
-
     return
 
   return
@@ -58,9 +52,13 @@ angular.module("AREAlarm", [
   , true
 
 
+  # Toggle area editing
+  $scope.onToggleEditArea = ->
+    $scope.areaEditing = !$scope.areaEditing
+
   # Changed power
   $scope.$watch('setting.power', ->
-    console.log '$scope.$watch.setting.power areaEditing: ', $scope.areaEditing
+    console.log '$scope.$watch.setting.power areaEditing: ', $scope, $scope.areaEditing
     
     if $scope.setting.power
       # If all days are false, return

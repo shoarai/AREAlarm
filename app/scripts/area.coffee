@@ -11,6 +11,7 @@ angular.module('AREAlarm')
     scope: {
       area: '='
       editing: '='
+      toggleEdit: '&'
     }
     controller: ['$scope', ($scope) ->
 
@@ -26,9 +27,8 @@ angular.module('AREAlarm')
         if $scope.area? and $scope.area.latitude?
           console.log 'Settings area: ', $scope.area
           mapService.showMap 'map-canvas', $scope.area
-            .then(
-              ->
-                onReadyMap()
+            .then( ->
+              onReadyMap()
             )
         
         else
@@ -88,6 +88,8 @@ angular.module('AREAlarm')
           areaBeforeEdit = $scope.area
           $scope.editing = true
 
+          $scope.toggleEdit()
+
         $scope.onkeydownSearch = (event) ->
           console.log 'onkeydownSearch: ', event.target.value
           if event.which is 13
@@ -110,6 +112,8 @@ angular.module('AREAlarm')
         finishEdit = ->
           mapService.finishEditArea()
           $scope.editing = false
+
+          $scope.toggleEdit()
 
         $scope.onClickOK = ->
           console.log 'onClickOK'
