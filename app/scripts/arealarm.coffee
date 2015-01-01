@@ -109,13 +109,16 @@ angular.module('AREAlarm')
   @wait = (waitTime) ->
     _setStatus 'waiting'
     console.log 'waitWatchPosition'
+
+    return
+    
     now = new Date().getTime()
     date = new Date(now + waitTime)
     window.plugin.notification.local.add({
-        id: 2
-        title: 'Start time'
-        autoCancel: true
-        date: date
+      id: 2
+      title: 'Start time'
+      autoCancel: true
+      date: date
     })
 
     window.plugin.notification.local.onclick = (id, state, json) ->
@@ -151,7 +154,7 @@ angular.module('AREAlarm')
   ###
   _calcNextTimeByDistance = (distance) ->
     # return　[msec] if [m] > [m]
-    return 60000 if distance > 3000
+    # return 60000 if distance > 3000
     return 30000 if distance > 1500
     return 20000 if distance > 1000
     return 10000 if distance > 500
@@ -169,12 +172,12 @@ angular.module('AREAlarm')
     # console.log window.plugin.notification.local
     # console.log window.plugin.notification.local.promptForPermission
     
-    window.plugin.notification.local.onadd = (id, state, json) ->
-      console.log 'onadd: ', id, state, json
+    # window.plugin.notification.local.onadd = (id, state, json) ->
+      # console.log 'onadd: ', id, state, json
 
 
-    window.plugin.notification.local.ontrigger = (id, state, json) ->
-      console.log 'ontrigger: ', id, state, json
+    # window.plugin.notification.local.ontrigger = (id, state, json) ->
+      # console.log 'ontrigger: ', id, state, json
 
     # window.plugin.notification.local.onclick = (id, state, json) ->
     #   console.log 'onclick: ', id, state, json
@@ -183,12 +186,12 @@ angular.module('AREAlarm')
         # _self.wait()
 
     window.plugin.notification.local.add({
-        id: 1
-        title: 'In area'
-        message: 'Click to stop notification'
-        autoCancel: true
-        # repeat:  'weekly',
-        # date:    new Date().getTime()
+      id: 1
+      title: 'In area'
+      message: 'Click to stop notification'
+      autoCancel: true
+      # repeat:  'weekly',
+      # date:    new Date().getTime()
     })
 
     # window.plugin.notification.local.hasPermission((granted) ->
