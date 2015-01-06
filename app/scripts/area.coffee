@@ -136,15 +136,16 @@ angular.module('AREAlarm')
     link: (scope, element, attrs) ->
       # defaultHeight = element.children()[0].style.height
       mapElement = element.children()[0]
+      bannarHeight = 50
       defaultHeight = 300
 
       # first iteration
-      defaultHeight =  $window.innerHeight - 90
+      defaultHeight =  $window.innerHeight - bannarHeight - 90
 
 
       scope.$watch('editing', (newValue) ->
         if newValue
-          height = $window.innerHeight - 140
+          height = $window.innerHeight - 140 - bannarHeight
           mapElement.style.height = height+'px'
         else
           mapElement.style.height = defaultHeight+'px'

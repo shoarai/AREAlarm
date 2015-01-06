@@ -19,13 +19,11 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-
-  <body ng-app="AREAlarm">
-
+  <body ng-app="AREAlarm" admob>
     <ion-pane ng-controller="MainCtrl">
       <ion-header-bar ng-class="isPowerOn(setting.power,'bar-')">
         <a license class="button button-icon icon ion-navicon" ng-hide="setting.power||areaEditing"></a>
-        <!-- <button class="button button-clear button-assertive" onclick="location.reload()">Reload</button> -->
+        <button class="button button-clear button-assertive" onclick="location.reload()">Reload</button>
         <h1 class="title" ng-hide="areaEditing">AREAlarm</h1>
         <h1 class="title" ng-show="areaEditing">Area setting</h1>
         <button id="toggle-power" class="button icon ion-power" ng-class="isPowerOn(!setting.power,'button-')" ng-hide="areaEditing" ng-click="setting.power=!setting.power"></button>
@@ -41,7 +39,7 @@
           <button class="button button-block button-positive">Start</button>
         </div> -->
       </ion-content>
-      <!-- <div class="bar bar-footer bar-balanced"> -->
+      <!-- <div admob class="bar bar-footer bar-balanced"> -->
         <!-- <div class="title">Footer</div> -->
         <!-- <button class="button button-block button-positive">
           Block Button
@@ -77,6 +75,7 @@
         <script src="scripts/alarm.js"></script>
         <script src="scripts/arealarm.js"></script>
         <script src="scripts/header.js"></script>
+        <script src="scripts/admob.js"></script>
         <!-- endbuild -->
 </body>
 </html>
