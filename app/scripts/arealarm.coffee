@@ -202,6 +202,9 @@ angular.module('AREAlarm')
     # return
 
     vibrateFlag = true
+    setTimeout ->
+      _self.stop()
+    , 10000
     repeatVibrate = ->
       console.log 'repeatVibrate'
       return if not vibrateFlag
