@@ -131,6 +131,8 @@ angular.module('AREAlarm')
     # , waitTime)
     return @
 
+  count = 0
+
   ###*
    * Watch position
   ###
@@ -138,7 +140,7 @@ angular.module('AREAlarm')
     return if _status isnt 'watching'
     mapService.calcDistanceLocation()
       .then((distance) ->
-        console.log '■Location from Phonegap, distance: ', distance
+        console.log '■Location from Phonegap', ++count, distance
 
         if distance < _radius
           _onInArea()
@@ -155,9 +157,9 @@ angular.module('AREAlarm')
   _calcNextTimeByDistance = (distance) ->
     # return　[msec] if [m] > [m]
     # return 60000 if distance > 3000
-    return 30000 if distance > 1500
-    return 20000 if distance > 1000
-    return 10000 if distance > 500
+    # return 30000 if distance > 1500
+    # return 20000 if distance > 1000
+    # return 10000 if distance > 500
     return 5000
 
   _self = @
